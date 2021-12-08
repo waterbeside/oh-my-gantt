@@ -38,7 +38,7 @@ export function renderTable(props: RenderTableProps, ctx: OhMyGantt): [HTMLEleme
   tableHeaderWrapperElm.appendChild(tableHeaderElm) // 生成表头
   tableHeaderElm.appendChild(renderColgroup({ columns }, ctx))
   tableHeaderElm.appendChild(tableHeaderTheadElm)
-  tableHeaderTheadElm.appendChild(renderTableRow({ isHeader: true, columns, options: props.options, isTimeGrid}, ctx))
+  tableHeaderTheadElm.appendChild(renderTableRow({ isHeader: true, columns,  isTimeGrid}, ctx))
 
   // --------- 表体
   tableInnerElm.appendChild(tableBodyWrapperElm) // 表体wrapper
@@ -48,8 +48,8 @@ export function renderTable(props: RenderTableProps, ctx: OhMyGantt): [HTMLEleme
 
   tableBodyTbodyElm.appendChild(renderColgroup({ columns }, ctx))
   if (props.data && props.data.length > 0) {
-    props.data.forEach((item: any) => {
-      tableBodyTbodyElm.appendChild(renderTableRow({ rowData: item, columns, isTimeGrid, options: props.options }, ctx))
+    props.data.forEach((item: any, index: number) => {
+      tableBodyTbodyElm.appendChild(renderTableRow({ rowData: item, rowIndex: index, columns, isTimeGrid }, ctx))
     })
   }
 

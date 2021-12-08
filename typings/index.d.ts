@@ -1,6 +1,5 @@
-
 type TimeInterval = 'day' | 'hour' | 'week' | 'month'  | number
-
+type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave'
 
 interface MyGanttElements {
   leftGrid: HTMLElement | null
@@ -15,6 +14,19 @@ interface ColumnItem {
   render?: (item: any) => HTMLElement
 }
 
+interface CellData {
+  rowData: any
+  $target: HTMLElement
+  rowIndex: number
+  value: any
+  rowId?: string
+  columnName?: string
+  [key: string]: any
+}
+
+interface TimeBarData extends CellData {
+  timeColumnsIndex: number[]
+}
 
 interface MyGanttOptions {
   start: Date | string
@@ -22,18 +34,21 @@ interface MyGanttOptions {
   columns: ColumnItem[]
   timeCellWidth?: number
   timeInterval?: TimeInterval
+  timeBarGap?: [number, number]
+  timeBarHeight?: number | null
   dateTableHeaderRender?: (date: Date) => HTMLElement
+  onClickCell?: (data: CellData, e: MouseEvent) => any
+  onClickTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onMouseoverTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onMouseleaveTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   [key: string]: any
 }
 
-interface MyGanttOptionsMerge {
-  start: Date | string
-  end: Date | string
-  columns: ColumnItem[]
+interface MyGanttOptionsMerge extends MyGanttOptions {
   timeCellWidth: number
   timeInterval: TimeInterval
-  dateTableHeaderRender?: (date: Date) => HTMLElement
-  [key: string]: any
+  timeBarGap: [number, number]
+  timeBarHeight: number | null
 }
 
 interface ComputeTimeBarWidthProps {
@@ -41,11 +56,21 @@ interface ComputeTimeBarWidthProps {
   endTime: string
 }
 
-interface ComputeTimeBarWidthReturn {
+// computeTimeBarWidth
+interface ComputeTimeBarReturn {
   width: number
   timeColumns: ColumnItem[]
   timeColumnsIndex: number[]
   debug?: any
+}
+
+interface RenderTableCellProps {
+  columnName?: string
+  children?: HTMLElement
+  text?: string
+  rowData?: any
+  rowIndex?: number | string
+  rowId?: number | string
 }
 
 interface RenderTableRowProps {
@@ -53,7 +78,7 @@ interface RenderTableRowProps {
   columns: ColumnItem[]
   height?: number
   rowData?: any
-  options?: MyGanttOptions
+  rowIndex?: number | string
   isTimeGrid?: boolean
 }
 
@@ -89,4 +114,9 @@ declare class OhMyGantt {
   renderRightGrid(): [HTMLElement, number];
   listenScroll(left: HTMLElement, right: HTMLElement): void;
   getScrollTop(): number;
+  _settGridAction(gridElement: HTMLElement): void;
+  _handleActionCell(e: MouseEvent, action: HandleMouseAction): void;
+  _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction): void;
+  _getCellData($target: HTMLElement): CellData
+  getRowDataByIndex(index: number): any
 }

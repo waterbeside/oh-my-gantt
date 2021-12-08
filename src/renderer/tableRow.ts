@@ -10,7 +10,6 @@ import { toDate } from '../helper'
  */
 export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTMLElement {
   const isTimeGrid = props.isTimeGrid || false
-  const options = props.options
   const tableRowElm = document.createElement('tr')
   tableRowElm.className = 'omg-grid__row'
   if (props.isHeader) {
@@ -31,7 +30,13 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
       tableRowElm.appendChild(headerfragment)
     } else if (props.rowData) {
       const headerfragment = isTimeGrid ? renderTimeGridBodyRow(props, ctx) : renderBodyRow(props, ctx)
-      tableRowElm.appendChild(headerfragment)      
+      tableRowElm.appendChild(headerfragment)
+      if (typeof props.rowIndex !== 'undefined')  {
+        tableRowElm.dataset.rowIndex = props.rowIndex.toString()
+      }
+      if (typeof props.rowData.id !== 'undefined')  {
+        tableRowElm.dataset.rowId = props.rowData.id.toString()
+      }
     }
   }
   return tableRowElm
@@ -45,7 +50,7 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
  */
 export function renderHeaderRow(props: RenderTableRowProps, ctx: OhMyGantt): DocumentFragment {
   const isTimeGrid = props.isTimeGrid || false
-  const options = props.options
+  const options = ctx.options
   const fragment = document.createDocumentFragment()
   props.columns.forEach((column: any) => {
     const cellProps: any = { columnName: column.name }
@@ -65,6 +70,9 @@ export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): Docum
   props.columns.forEach((column: any) => {
     const cellProps: any = { columnName: column.name }
     cellProps.text = rowData[column.name]
+    if (typeof props.rowIndex !== 'undefined') {
+      cellProps.rowIndex = props.rowIndex
+    }
     fragment.appendChild(renderTableCell(cellProps, ctx))
   })
   return fragment
@@ -72,6 +80,7 @@ export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): Docum
 
 
 export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): DocumentFragment {
+  const options = ctx.options
   const fragment = document.createDocumentFragment()
   const rowData = props.rowData
 
@@ -79,13 +88,16 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
   const startTimeStamp = toDate(rowData.startTime).getTime()
   props.columns.forEach((column: any) => {
     const cellProps: any = { columnName: column.name }
+    if (typeof props.rowIndex !== 'undefined') {
+      cellProps.rowIndex = props.rowIndex
+    }
     if (column.name === startTimeStamp) {
-      console.log('column.name === startTimeStamp')
       const timeBarProps = {
-        width: timeBarData.width - 8
+        width: timeBarData.width - options.timeBarGap[1] * 2,
       }
       cellProps.children =  renderTimeBar(timeBarProps, ctx)
-      console.log('cellProps.children', cellProps.children)
+      cellProps.children.dataset.timeColumnsIndex = timeBarData.timeColumnsIndex.join(',')
+      
     }
     
     fragment.appendChild(renderTableCell(cellProps, ctx))

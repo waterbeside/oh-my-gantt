@@ -22,7 +22,9 @@ export default class OhMyGantt {
     const defaultOptions: any = {
       timeCellWidth: 120,
       leftWidth: 240,
-      timeInterval: 'day'
+      timeInterval: 'day',
+      timeBarGap: [4, 4],
+      timeBarHeight: 20,
     }
     const opt: MyGanttOptionsMerge = {
       ...defaultOptions,
@@ -98,6 +100,7 @@ export default class OhMyGantt {
     
     this.element.appendChild($rightGrid)
     this.$elements.rightGrid = $rightGrid
+    this._settGridAction($rightGrid)
     return [$rightGrid, timeGridInnerWidth]
   }
   
@@ -121,5 +124,82 @@ export default class OhMyGantt {
 
   getScrollTop() {
     return this.$elements.leftGrid?.querySelector('.omg-grid__body-wrapper')?.scrollTop || 0
+  }
+
+  _settGridAction($gridElm: HTMLElement) {
+    $gridElm.addEventListener('click', (e: MouseEvent) => {
+      if(this._handleActionTimeBar(e, 'click')) {
+        return
+      }
+      this._handleActionCell(e, 'click')
+    })
+    $gridElm.addEventListener('mouseover', (e: MouseEvent) => {
+      if(this._handleActionTimeBar(e, 'mouseover')) {
+        this._handleActionTimeBar(e, 'mouseover')
+      }
+    })
+  }
+
+  _handleActionCell(e: MouseEvent, action: HandleMouseAction = 'click') {
+    const target = e.target as HTMLElement
+    const actionFunNames = {
+      click: 'onClickCell',
+      mouseover: 'onMouseoverCell',
+      mouseleave: 'onMouseleaveCell'
+    }
+    // 点击单元格
+    const $target = target.closest('.omg-grid__cell') as HTMLElement
+    if ($target && typeof this.options[actionFunNames[action]] !== 'undefined') {
+      const cellData = this._getCellData($target)
+      const res = this.options[actionFunNames[action]](cellData, e)
+      return res
+    }
+  }
+
+  _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction = 'click') {
+    const target = e.target as HTMLElement
+    const actionFunNames = {
+      click: 'onClickTimeBar',
+      mouseover: 'onMouseoverTimeBar',
+      mouseleave: 'onMouseleaveTimeBar'
+    }
+    // 点击单元格
+    const $target = target.closest('.omg-grid__time-bar') as HTMLElement
+    if ($target) {
+      const $cellTarget = $target.closest('.omg-grid__cell') as HTMLElement
+      if ($cellTarget && typeof this.options[actionFunNames[action]] !== 'undefined') {
+        const cellData = this._getCellData($cellTarget)
+        cellData.$target = $target
+
+        const timeBarData: TimeBarData = {
+          ...cellData,
+          timeColumnsIndex: $target.dataset.timeColumnsIndex?.split(',').map(Number) || []
+        }
+        const res = this.options[actionFunNames[action]](timeBarData, e)
+        return res
+      }
+    }
+    
+  }
+
+  _getCellData($target: HTMLElement): CellData {
+    const rowIndex = Number($target.dataset.rowIndex)
+    const columnName = $target.dataset.columnName
+    
+    const rowId = $target.dataset?.rowId
+    const rowData = this.getRowDataByIndex(rowIndex)
+    const value = columnName && typeof rowData[columnName] !== 'undefined' ? rowData[columnName] : ''
+    return {
+      rowData,
+      rowIndex,
+      $target,
+      columnName,
+      rowId,
+      value
+    }
+  }
+
+  getRowDataByIndex(index: number) {
+    return this.data[index]
   }
 }
