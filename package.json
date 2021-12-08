@@ -1,6 +1,6 @@
 {
   "name": "oh-my-gantt",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -10,8 +10,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Natron Kan",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "@types/ms": "^0.7.31",
