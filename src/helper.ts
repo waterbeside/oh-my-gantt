@@ -1,6 +1,3 @@
-/**
- * 防抖
- */
 export function debounce(
   fn: (...args: any) => any | void,
   wait = 500
@@ -105,7 +102,7 @@ export function getTimeListInterval(flag: 'day' | 'hour' | 'week' | 'month'  | n
  * @param target 目标
  */
 export function syncScroll(source: HTMLElement, target: HTMLElement | HTMLElement[]) {
-  source.onscroll = (e) => {
+  source.onscroll = () => {
     if (Array.isArray(target)) {
       for (const item of target) {
         item.scrollTop = source.scrollTop
@@ -146,7 +143,7 @@ export function computeInnerWidth(props: { columns: ColumnItem[]}): number {
  * @param {OhMyGantt} ctx 
  * @returns {number}
  */
-export function computeTimeBar(props: ComputeTimeBarWidthProps, ctx: OhMyGantt): ComputeTimeBarWidthReturn {
+export function computeTimeBar(props: ComputeTimeBarWidthProps, ctx: OhMyGantt): ComputeTimeBarReturn {
   const { options, timeColumns } = ctx
   const { startTime, endTime } = props
   const startTimeStamp =  toDate(startTime).getTime()
@@ -171,5 +168,3 @@ export function computeTimeBar(props: ComputeTimeBarWidthProps, ctx: OhMyGantt):
     timeColumnsIndex: timeColumnsFilterIndex,
   }
 }
-
-
