@@ -81,14 +81,10 @@
       border-bottom: none;
     }
   }
-  &__row {
-
-  }
 
   &__cell {
     width: 100px;
     height: 50px;
-    padding: 10px 0;
     box-sizing: border-box;
     border: 1px solid #ccc;
     &:last-child {
@@ -142,8 +138,8 @@
   .omg-grid__time-bar {
     position: absolute;
     left: 0;
-    top: 4px;
-    bottom: 4px;
+    top: 0;
+    bottom: 0;
     font-size: 12px;
     background: rgba(0, 170, 255, 0.923);
     border-radius: 20px;
