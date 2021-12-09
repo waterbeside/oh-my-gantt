@@ -1,5 +1,6 @@
 
-import { getTimeList, getTimeListInterval, syncScroll, toDate } from './helper'
+import { syncScroll, computeTimeColumnLabel } from './utils/helper'
+import { toDate, getTimeList } from './utils/dateHelper'
 import { renderTable } from './renderer/index'
 
 
@@ -43,8 +44,7 @@ export default class OhMyGantt {
     this.timeListEnd = toDate(opt.end)
 
     // 初始化日期列表
-    const timeListInterval = getTimeListInterval(options.timeInterval)
-    this.timeList = getTimeList(opt.start, opt.end, timeListInterval)
+    this.timeList = getTimeList(opt.start, opt.end, options.timeInterval)
     this.render()
   }
 
@@ -81,13 +81,14 @@ export default class OhMyGantt {
     const timeColumns: any[] = []
     for (const date of this.timeList) {
       timeColumns.push({
-        label: `${date.getFullYear()}<br/>
-          ${('0' + (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`,
+        label: computeTimeColumnLabel(date, this),
         width: this.options.timeCellWidth,
         name: date.getTime(),
         sourceData: date
       })
     }
+    console.log('timeColumns', timeColumns)
+    console.log('this.timeList', this.timeList)
     this.timeColumns = timeColumns
 
     const [$rightGrid, timeGridInnerWidth] = renderTable({
@@ -166,15 +167,9 @@ export default class OhMyGantt {
     // 点击单元格
     const $target = target.closest('.omg-grid__time-bar') as HTMLElement
     if ($target) {
-      const $cellTarget = $target.closest('.omg-grid__cell') as HTMLElement
+      const $cellTarget = $target.closest('.omg-grid__cell')
       if ($cellTarget && typeof this.options[actionFunNames[action]] !== 'undefined') {
-        const cellData = this._getCellData($cellTarget)
-        cellData.$target = $target
-
-        const timeBarData: TimeBarData = {
-          ...cellData,
-          timeColumnsIndex: $target.dataset.timeColumnsIndex?.split(',').map(Number) || []
-        }
+        const timeBarData: TimeBarData = this._getTimeBarData($target)
         const res = this.options[actionFunNames[action]](timeBarData, e)
         return res
       }
@@ -197,6 +192,16 @@ export default class OhMyGantt {
       rowId,
       value
     }
+  }
+
+  _getTimeBarData($target: HTMLElement): TimeBarData {
+    const $cellTarget = $target.closest('.omg-grid__cell') as HTMLElement
+    const cellData = this._getCellData($cellTarget)
+    const timeBarData: TimeBarData = {
+      ...cellData,
+      timeColumnsIndex: $target.dataset.timeColumnsIndex?.split(',').map(Number) || []
+    }
+    return timeBarData
   }
 
   getRowDataByIndex(index: number) {

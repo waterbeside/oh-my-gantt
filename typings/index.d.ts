@@ -1,4 +1,4 @@
-type TimeInterval = 'day' | 'hour' | 'week' | 'month'  | number
+type TimeInterval = 'day' | 'hour' | 'week' | 'month' | 'year' | number
 type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave'
 
 interface MyGanttElements {
@@ -28,6 +28,11 @@ interface TimeBarData extends CellData {
   timeColumnsIndex: number[]
 }
 
+interface LabelRendererData {
+  columnData: ColumnItem
+}
+
+// 醒置项
 interface MyGanttOptions {
   start: Date | string
   end: Date | string
@@ -36,11 +41,12 @@ interface MyGanttOptions {
   timeInterval?: TimeInterval
   timeBarGap?: [number, number]
   timeBarHeight?: number | null
-  dateTableHeaderRender?: (date: Date) => HTMLElement
   onClickCell?: (data: CellData, e: MouseEvent) => any
   onClickTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onMouseoverTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onMouseleaveTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  timeBarRenderer?: (data: TimeBarData, ctx: OhMyGantt) => HTMLElement | string | null
+  timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => HTMLElement | string | null
   [key: string]: any
 }
 
@@ -51,19 +57,20 @@ interface MyGanttOptionsMerge extends MyGanttOptions {
   timeBarHeight: number | null
 }
 
-interface ComputeTimeBarWidthProps {
+// helper - computeTimeBar方法的 参数
+interface ComputeTimeBarProps {
   startTime: string
   endTime: string
 }
 
-// computeTimeBarWidth
+// helper - computeTimeBar 方法的返回值
 interface ComputeTimeBarReturn {
   width: number
   timeColumns: ColumnItem[]
   timeColumnsIndex: number[]
-  debug?: any
 }
 
+// renderer - renderTableCel 参数
 interface RenderTableCellProps {
   columnName?: string
   children?: HTMLElement
@@ -71,18 +78,30 @@ interface RenderTableCellProps {
   rowData?: any
   rowIndex?: number | string
   rowId?: number | string
+  columnIndex: number
 }
 
+// renderer - renderTableRow 参数
 interface RenderTableRowProps {
   isHeader?: boolean
   columns: ColumnItem[]
   height?: number
   rowData?: any
   rowIndex?: number | string
+  rowId?: number | string
   isTimeGrid?: boolean
 }
 
+// renderer - renderTimeBar 参数
+interface RenderTimeBarProps {
+  width: number
+  rowData: any
+  rowIndex?: number | string
+  rowId?: number | string
+  timeColumnsIndex: number[]
+}
 
+// renderer - renderTaber 参数
 interface RenderTableProps {
   className?: string | string[]
   isTimeGrid?: boolean
@@ -118,5 +137,6 @@ declare class OhMyGantt {
   _handleActionCell(e: MouseEvent, action: HandleMouseAction): void;
   _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction): void;
   _getCellData($target: HTMLElement): CellData
+  _getTimeBarData($target: HTMLElement): TimeBarData
   getRowDataByIndex(index: number): any
 }

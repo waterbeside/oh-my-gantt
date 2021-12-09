@@ -36,7 +36,9 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
         tableRowElm.dataset.rowId = props.rowData.id.toString()
       }
       const bodyfragment = isTimeGrid ? renderTimeGridBodyRow(props, ctx) : renderBodyRow(props, ctx)
+
       tableRowElm.appendChild(bodyfragment)
+      
     }
   }
   return tableRowElm
@@ -52,10 +54,10 @@ export function renderHeaderRow(props: RenderTableRowProps, ctx: OhMyGantt): Doc
   const isTimeGrid = props.isTimeGrid || false
   const options = ctx.options
   const fragment = document.createDocumentFragment()
-  props.columns.forEach((column: any) => {
-    const cellProps: any = { columnName: column.name }
-    if (isTimeGrid && options?.dateTableHeaderRender) { // 如果是时间表格
-      cellProps.children =  options.dateTableHeaderRender(column.sourceData)
+  props.columns.forEach((column: ColumnItem, index: number) => {
+    const cellProps: any = { columnName: column.name, columnIndex: index }
+    if (isTimeGrid && options?.timeLabelRenderer) { // 如果是时间表格 并需要重新染染内容的
+      cellProps.children =  options.timeLabelRenderer(column, index, ctx)
     } else {
       cellProps.text = column.label
     }
@@ -67,8 +69,8 @@ export function renderHeaderRow(props: RenderTableRowProps, ctx: OhMyGantt): Doc
 export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): DocumentFragment {
   const fragment = document.createDocumentFragment()
   const rowData = props.rowData
-  props.columns.forEach((column: any) => {
-    const cellProps: any = { columnName: column.name }
+  props.columns.forEach((column: ColumnItem, index: number) => {
+    const cellProps: any = { columnName: column.name, columnIndex: index }
     cellProps.text = rowData[column.name]
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
@@ -94,9 +96,10 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
     timeIntervalFormatter = getTimeIntervarFormatter(ctx.options.timeInterval, true)
   }
   const startTimeStamp = toDate(dateFormat(rowData.startTime, timeIntervalFormatter)).getTime()
+  
 
   props.columns.forEach((column: any, index: number) => {
-    const cellProps: any = { columnName: column.name }
+    const cellProps: any = { columnName: column.name, columnIndex: index }
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
     }
