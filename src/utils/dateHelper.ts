@@ -118,7 +118,7 @@ export function getTimeIntervarFormatter(timeInterval: TimeInterval, fill = fals
 }
 
 
-export function getTimeListInterval(flag: 'day' | 'hour' | 'week' | 'month'  | number= 'day') {
+export function getTimeListInterval(flag: 'day' | 'hour' | 'week' | 'month'  | number = 'day') {
   if (typeof flag === 'number') {
     return flag
   }
