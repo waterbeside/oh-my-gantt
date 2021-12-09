@@ -1,4 +1,4 @@
-import { computeInnerWidth } from '../helper'
+import { computeInnerWidth } from '../utils/helper'
 import { renderColgroup } from './colgroup' 
 import { renderTableRow } from './tableRow'
 
