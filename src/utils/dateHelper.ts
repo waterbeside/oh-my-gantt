@@ -106,7 +106,7 @@ export function getTimeListBase(
   return list
 }
 
-export function getTimeIntervarFormatter(timeInterval: TimeInterval, fill: boolean = false): string {
+export function getTimeIntervarFormatter(timeInterval: TimeInterval, fill = false): string {
   if (timeInterval === 'year') {
     return fill ? 'YYYY-01-01 00:00:00' : 'YYYY'
   } else if (timeInterval === 'month') {
