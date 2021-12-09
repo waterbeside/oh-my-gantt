@@ -34,19 +34,16 @@
 
 
 .omg-grid {
-  // border-right: 1px solid #ccc;
   height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
 
-  // @include scrollbar;
   * {
     box-sizing: border-box;
   }
   
 
   &__inner {
-    // min-width: 200%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -55,27 +52,17 @@
     height: 100%;
     overflow-y: hidden;
   }
-  // &__header-wrapper {
-
-  // }
   &__header {  // table
     @include tableBase;
-    // width: calc(100% - 1px);
     height: 80px;
     background: #f5f5f5;
     border-bottom: 2px solid #ccc;
-
-    // display: flex;
-    // flex-direction: row;
     font-weight: bold;
     
     .omg-grid__row:last-child {
       border-bottom: none;
     }
     .omg-grid__cell {
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
       position: relative;
       text-align: center;
       border-bottom: none;
@@ -101,29 +88,11 @@
     height: calc(100% - 80px);
     margin-top: -1px;
     overflow-y: auto;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
-    // align-items: center;
-
-    // @include scrollbar;
   }
 
   &__body { // table
     @include tableBase;
     width: 100%;
-    // width: calc(100% + 1px);
-    // margin-left: -1px;
-    // margin-right: -1px;
-
-    // .gantt-grid__row { // tr
-    //   .gantt-grid__cell { // td
-    //     // display: flex;
-    //     // flex-direction: column;
-    //     // justify-content: center;
-    //     // text-align: center;
-    //   }
-    // }
   }
   
 }
@@ -143,6 +112,9 @@
     font-size: 12px;
     background: rgba(0, 170, 255, 0.923);
     border-radius: 20px;
-    // border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
   }
 }
