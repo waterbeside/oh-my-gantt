@@ -4,9 +4,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import scss from 'rollup-plugin-scss'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
-// import typescript from 'rollup-plugin-typescript'
 import ts from 'rollup-plugin-typescript2'
-// import dts from 'rollup-plugin-dts'
 import pkg from './package.json'
 
 const getPath = _path => path.resolve(__dirname, _path)
@@ -56,7 +54,7 @@ export default [
     plugins: [
       scss({
         processor: () => postcss([autoprefixer()]),
-
+        output: 'dist/index.css'
       })
     ]
   }
