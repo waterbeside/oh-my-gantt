@@ -81,7 +81,6 @@ export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): Docum
   return fragment
 }
 
-
 export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): DocumentFragment {
   const options = ctx.options
   const fragment = document.createDocumentFragment()
@@ -94,7 +93,6 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
     timeIntervalFormatter = getTimeIntervarFormatter(ctx.options.timeInterval, true)
   }
   const startTimeStamp = toDate(dateFormat(rowData.startTime, timeIntervalFormatter)).getTime()
-  
 
   props.columns.forEach((column: any, index: number) => {
     const cellProps: any = { columnName: column.name, columnIndex: index }
@@ -109,7 +107,6 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
       }
       cellProps.children =  renderTimeBar(timeBarProps, ctx)      
     }
-    
     fragment.appendChild(renderTableCell(cellProps, ctx))
   })
   return fragment

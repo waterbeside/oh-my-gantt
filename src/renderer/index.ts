@@ -3,7 +3,6 @@ import { renderColgroup } from './colgroup'
 import { renderTableRow } from './tableRow'
 
 
-
 /**
  * 生成表格
  * @param props 

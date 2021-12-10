@@ -29,7 +29,7 @@ module.exports = {
               'requireLast': false
           }
       }
-  ],
+    ],
     'semi': [2, 'never'],
     'quotes': [2, 'single']
   }

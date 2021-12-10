@@ -21,8 +21,6 @@ const tsPlugin = ts({
   extensions
 })
 
-console.log('getPath', getPath(pkg.types))
-
 export default [
   // UMD for browser-friendly build
   {
