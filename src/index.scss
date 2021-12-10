@@ -135,3 +135,29 @@
 
   }
 }
+
+
+.omg-pop-tips {
+  position: absolute;
+
+  width: 260px;
+  height: 160px;
+  z-index: 1000;
+  background: #fff;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  &__arrow {
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid #ccc;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    top: -10px;
+    z-index: 1;
+  }
+}
