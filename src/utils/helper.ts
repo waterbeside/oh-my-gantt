@@ -131,3 +131,27 @@ export function computeTimeColumnLabel(date: Date, ctx: OhMyGantt): string {
   return dateFormat(date, 'YYYY-MM-DD HH:mm:ss')
 
 }
+
+/**
+ * 创建元素
+ * @param tag 标签名
+ * @param props 属性
+ * @param children 子完素
+ * @returns 
+ */
+export function createElement(tag: string, props: any, ...children: any[]): HTMLElement {
+  const element = document.createElement(tag)
+  Object.keys(props).forEach(key => {
+    element.setAttribute(key, props[key])
+  })
+
+  if (Array.isArray(children)) {
+    children.forEach(child => {
+      if (typeof child === 'string') {
+        child = document.createTextNode(child)
+      }
+      element.appendChild(child)
+    })
+  }
+  return element
+}

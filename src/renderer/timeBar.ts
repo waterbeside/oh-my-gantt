@@ -8,6 +8,9 @@ export function renderTimeBar(props: RenderTimeBarProps, ctx: OhMyGantt): HTMLEl
   barElm.style.width = `${props.width}px`
   barElm.dataset.timeColumnsIndex = props.timeColumnsIndex.join(',')
 
+  if (options.timeBarDraggable) {
+    barElm.draggable = true
+  }
   if (options.timeBarGap[1] > 0) {
     barElm.style.marginLeft = `${options.timeBarGap[1]}px`
   }
@@ -23,6 +26,11 @@ export function renderTimeBar(props: RenderTimeBarProps, ctx: OhMyGantt): HTMLEl
   if (options.onMouseleaveTimeBar){
     barElm.addEventListener('mouseleave', (e: MouseEvent) => {ctx._handleActionTimeBar(e, 'mouseleave')})
   }
+  if (options.onDragTimeBar){
+    barElm.addEventListener('mouseleave', (e: MouseEvent) => {ctx._handleActionTimeBar(e, 'mouseleave')})
+  }
+
+  
   if (options.timeBarRenderer) {
     // const timeBarData = ctx._getTimeBarData(barElm)
     const timeBarData: TimeBarData = {

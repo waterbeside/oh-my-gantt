@@ -6,6 +6,7 @@
 export function renderTableCell(props: RenderTableCellProps, ctx: OhMyGantt) {
   const tableCellElm = document.createElement('td')
   tableCellElm.className = 'omg-grid__cell'
+
   tableCellElm.dataset.columnIndex = String(props.columnIndex)
   if (props.columnName) {
     tableCellElm.classList.add(`omg-grid__cell-${props.columnName}`)

@@ -36,9 +36,7 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
         tableRowElm.dataset.rowId = props.rowData.id.toString()
       }
       const bodyfragment = isTimeGrid ? renderTimeGridBodyRow(props, ctx) : renderBodyRow(props, ctx)
-
       tableRowElm.appendChild(bodyfragment)
-      
     }
   }
   return tableRowElm

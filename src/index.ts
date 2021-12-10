@@ -1,5 +1,5 @@
 
-import { syncScroll, computeTimeColumnLabel } from './utils/helper'
+import { syncScroll, computeTimeColumnLabel, createElement } from './utils/helper'
 import { toDate, getTimeList } from './utils/dateHelper'
 import { renderTable } from './renderer/index'
 
@@ -26,6 +26,7 @@ export default class OhMyGantt {
       timeInterval: 'day',
       timeBarGap: [4, 4],
       timeBarHeight: 20,
+      timeBarDraggable: false,
     }
     const opt: MyGanttOptionsMerge = {
       ...defaultOptions,
@@ -123,6 +124,22 @@ export default class OhMyGantt {
   }
 
   _settGridAction($gridElm: HTMLElement, isTimeGrid = false) {
+    // 当允许拖拽时，添加拖拽相关事件
+    if (this.options.timeBarDraggable && isTimeGrid) {
+      const dropCellActionNames = ['drop', 'dragover', 'dragleave', 'dragenter']
+      dropCellActionNames.forEach(actionName => {
+        $gridElm.addEventListener(actionName, (e: Event) => {
+          this._handleActionCell(e, actionName as any, isTimeGrid)
+        })
+      });
+      const dragTimeBarActionNames = ['dragstart', 'dragend', 'drag']
+      dragTimeBarActionNames.forEach(actionName => {
+        $gridElm.addEventListener(actionName, (e: Event) => {
+          this._handleActionTimeBar(e, actionName as any)
+        })
+      });
+    }
+
     $gridElm.addEventListener('click', (e: MouseEvent) => {
       if (isTimeGrid && this._handleActionTimeBar(e, 'click')) {
         return
@@ -137,34 +154,42 @@ export default class OhMyGantt {
     })
   }
 
-  _handleActionCell(e: MouseEvent, action: HandleMouseAction = 'click', isTimeGrid = false) {
+  _handleActionCell(e: Event, action: HandleMouseAction | HandleDragAction= 'click', isTimeGrid = false) {
     const target = e.target as HTMLElement
-    const actionFunNames = {
+    const actionFunNames: any = {
       click: 'onClickCell',
       mouseover: 'onMouseoverCell',
-      mouseleave: 'onMouseleaveCell'
+      mouseleave: 'onMouseleaveCell',
+      drop: 'onDropCell',
+      dragover: 'onDragoverCell',
+      dragleave: 'onDragleaveCell',
+      dragenter: 'onDragenterCell'
+
     }
     // 点击单元格
     const $target = target.closest('.omg-grid__cell') as HTMLElement
-    if ($target && typeof this.options[actionFunNames[action]] !== 'undefined') {
+    if ($target && actionFunNames[action] && typeof this.options[actionFunNames[action]] !== 'undefined') {
       const cellData = this._getCellData($target, isTimeGrid)
       const res = this.options[actionFunNames[action]](cellData, e)
       return res
     }
   }
 
-  _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction = 'click') {
+  _handleActionTimeBar(e: Event, action: HandleMouseAction | HandleDragAction = 'click') {
     const target = e.target as HTMLElement
-    const actionFunNames = {
+    const actionFunNames: any = {
       click: 'onClickTimeBar',
       mouseover: 'onMouseoverTimeBar',
-      mouseleave: 'onMouseleaveTimeBar'
+      mouseleave: 'onMouseleaveTimeBar',
+      dragstart: 'onDragstartTimeBar',
+      dragend: 'onDragendTimeBar',
+      drag: 'onDragTimeBar'
     }
     // 点击单元格
     const $target = target.closest('.omg-grid__time-bar') as HTMLElement
     if ($target) {
       const $cellTarget = $target.closest('.omg-grid__cell')
-      if ($cellTarget && typeof this.options[actionFunNames[action]] !== 'undefined') {
+      if ($cellTarget && actionFunNames[action] && typeof this.options[actionFunNames[action]] !== 'undefined') {
         const timeBarData: TimeBarData = this._getTimeBarData($target)
         const res = this.options[actionFunNames[action]](timeBarData, e)
         return res
@@ -212,4 +237,6 @@ export default class OhMyGantt {
     }
     return this.data[index]
   }
+
+  createElement = createElement
 }

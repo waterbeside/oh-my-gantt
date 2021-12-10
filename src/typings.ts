@@ -1,5 +1,6 @@
 type TimeInterval = 'day' | 'hour' | 'week' | 'month' | 'year' | number
-type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave'
+type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave' | 'dragstart' 
+type HandleDragAction = 'dragend' | 'drag' | 'dragenter' | 'dragover' | 'dropleave'| 'drop'
 type RendererReturnType = DocumentFragment | HTMLElement | string | null
 interface MyGanttElements {
   leftGrid: HTMLElement | null
@@ -43,10 +44,18 @@ interface MyGanttOptions {
   timeInterval?: TimeInterval
   timeBarGap?: [number, number]
   timeBarHeight?: number | null
+  timeaBarDraggable?: boolean
   onClickCell?: (data: CellData, e: MouseEvent) => any
   onClickTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onMouseoverTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onMouseleaveTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onDropCell?: (data: CellData, e: MouseEvent) => any
+  onDragoverCell?: (data: CellData, e: MouseEvent) => any
+  onDragleaveCell?: (data: CellData, e: MouseEvent) => any
+  onDragenterCell?: (data: CellData, e: MouseEvent) => any
+  onDragstartTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onDragendTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onDragTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   timeBarRenderer?: (data: TimeBarData, ctx: OhMyGantt) => RendererReturnType
   timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
@@ -57,6 +66,7 @@ interface MyGanttOptionsMerge extends MyGanttOptions {
   timeInterval: TimeInterval
   timeBarGap: [number, number]
   timeBarHeight: number | null
+  timeaBarDraggable: boolean
 }
 
 // helper - computeTimeBar方法的 参数
@@ -136,9 +146,10 @@ declare class OhMyGantt {
   listenScroll(left: HTMLElement, right: HTMLElement): void;
   getScrollTop(): number;
   _settGridAction(gridElement: HTMLElement): void;
-  _handleActionCell(e: MouseEvent, action: HandleMouseAction): void;
-  _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction): void;
+  _handleActionCell(e: Event, action: HandleMouseAction | HandleDragAction): void;
+  _handleActionTimeBar(e: Event, action: HandleMouseAction | HandleDragAction): void;
   _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
   _getTimeBarData($target: HTMLElement): TimeBarData
   getRowDataByIndex(index: number): any
+  createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }
