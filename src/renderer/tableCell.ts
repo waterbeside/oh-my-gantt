@@ -18,10 +18,12 @@ export function renderTableCell(props: RenderTableCellProps, ctx: OhMyGantt) {
     tableCellElm.dataset.rowIndex = props.rowIndex.toString()
   }
   if (props.children) {
-    tableCellElm.innerHTML = ''
     tableCellElm.appendChild(props.children)
   } else if (typeof props.text !== 'undefined') {
-    tableCellElm.innerHTML = props.text
+    const cellElm =  document.createElement('div')
+    cellElm.className = 'cell'
+    cellElm.innerHTML = props.text
+    tableCellElm.appendChild(cellElm)
   }
   return tableCellElm
 }

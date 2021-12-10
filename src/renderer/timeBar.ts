@@ -30,7 +30,8 @@ export function renderTimeBar(props: RenderTimeBarProps, ctx: OhMyGantt): HTMLEl
       $target: barElm,
       rowIndex: Number(props?.rowIndex),
       value: null,
-      timeColumnsIndex: props.timeColumnsIndex
+      timeColumnsIndex: props.timeColumnsIndex,
+      columnIndex: props.timeColumnsIndex[0],
     }
     if (props.rowId) {
       timeBarData.rowId = String(props.rowId)

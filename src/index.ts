@@ -71,6 +71,7 @@ export default class OhMyGantt {
     $leftGrid.style.width = `${leftWidth}px`
     this.element.appendChild($leftGrid)
     this.$elements.leftGrid = $leftGrid
+    this._settGridAction($leftGrid, false)
     return [$leftGrid, dataGridInnerWidth]
   }
 
@@ -87,8 +88,6 @@ export default class OhMyGantt {
         sourceData: date
       })
     }
-    console.log('timeColumns', timeColumns)
-    console.log('this.timeList', this.timeList)
     this.timeColumns = timeColumns
 
     const [$rightGrid, timeGridInnerWidth] = renderTable({
@@ -101,7 +100,7 @@ export default class OhMyGantt {
     
     this.element.appendChild($rightGrid)
     this.$elements.rightGrid = $rightGrid
-    this._settGridAction($rightGrid)
+    this._settGridAction($rightGrid, true)
     return [$rightGrid, timeGridInnerWidth]
   }
   
@@ -112,36 +111,33 @@ export default class OhMyGantt {
     const leftBdScroll = left.querySelector('.omg-grid__body-wrapper') as HTMLElement
     const rightBdScroll = right.querySelector('.omg-grid__body-wrapper') as HTMLElement
 
-    console.log(leftBdScroll, rightBdScroll)
-
     if (!leftBdScroll || !rightBdScroll) {
       throw new Error('Invalid element provided')
     }
 
     syncScroll(leftBdScroll, rightBdScroll)
-    syncScroll(rightBdScroll, leftBdScroll)
-    // const leftBdScrollTop = leftBdScroll.scrollTop;
   }
 
   getScrollTop() {
     return this.$elements.leftGrid?.querySelector('.omg-grid__body-wrapper')?.scrollTop || 0
   }
 
-  _settGridAction($gridElm: HTMLElement) {
+  _settGridAction($gridElm: HTMLElement, isTimeGrid = false) {
     $gridElm.addEventListener('click', (e: MouseEvent) => {
-      if(this._handleActionTimeBar(e, 'click')) {
+      if (isTimeGrid && this._handleActionTimeBar(e, 'click')) {
         return
       }
-      this._handleActionCell(e, 'click')
+      this._handleActionCell(e, 'click', isTimeGrid)
     })
     $gridElm.addEventListener('mouseover', (e: MouseEvent) => {
-      if(this._handleActionTimeBar(e, 'mouseover')) {
-        this._handleActionTimeBar(e, 'mouseover')
-      }
+      if (isTimeGrid && this._handleActionTimeBar(e, 'mouseover')) {
+        return
+      } 
+      this._handleActionCell(e, 'mouseover', isTimeGrid)
     })
   }
 
-  _handleActionCell(e: MouseEvent, action: HandleMouseAction = 'click') {
+  _handleActionCell(e: MouseEvent, action: HandleMouseAction = 'click', isTimeGrid = false) {
     const target = e.target as HTMLElement
     const actionFunNames = {
       click: 'onClickCell',
@@ -151,7 +147,7 @@ export default class OhMyGantt {
     // 点击单元格
     const $target = target.closest('.omg-grid__cell') as HTMLElement
     if ($target && typeof this.options[actionFunNames[action]] !== 'undefined') {
-      const cellData = this._getCellData($target)
+      const cellData = this._getCellData($target, isTimeGrid)
       const res = this.options[actionFunNames[action]](cellData, e)
       return res
     }
@@ -177,18 +173,23 @@ export default class OhMyGantt {
     
   }
 
-  _getCellData($target: HTMLElement): CellData {
+  _getCellData($target: HTMLElement, isTimeGrid = false,): CellData {
     const rowIndex = Number($target.dataset.rowIndex)
     const columnName = $target.dataset.columnName
-    
+    const columnIndex = Number($target.dataset.columnIndex)
     const rowId = $target.dataset?.rowId
     const rowData = this.getRowDataByIndex(rowIndex)
-    const value = columnName && typeof rowData[columnName] !== 'undefined' ? rowData[columnName] : ''
+    const rowHeaderElm = $target.closest('.omg-grid__row--header')
+    let value = rowData && columnName && typeof rowData[columnName] !== 'undefined' ? rowData[columnName] : ''
+    if (isTimeGrid && rowHeaderElm) {
+      value = this.timeList[columnIndex] || null
+    }
     return {
       rowData,
       rowIndex,
       $target,
       columnName,
+      columnIndex,
       rowId,
       value
     }
@@ -196,15 +197,19 @@ export default class OhMyGantt {
 
   _getTimeBarData($target: HTMLElement): TimeBarData {
     const $cellTarget = $target.closest('.omg-grid__cell') as HTMLElement
-    const cellData = this._getCellData($cellTarget)
+    const cellData = this._getCellData($cellTarget, true)
     const timeBarData: TimeBarData = {
       ...cellData,
+      $target,
       timeColumnsIndex: $target.dataset.timeColumnsIndex?.split(',').map(Number) || []
     }
     return timeBarData
   }
 
   getRowDataByIndex(index: number) {
+    if (Number.isNaN(index)) {
+      return null
+    }
     return this.data[index]
   }
 }

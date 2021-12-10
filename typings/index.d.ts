@@ -1,6 +1,7 @@
-type TimeInterval = 'day' | 'hour' | 'week' | 'month' | 'year' | number
+declare module 'oh-my-gantt' {
+  type TimeInterval = 'day' | 'hour' | 'week' | 'month' | 'year' | number
 type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave'
-
+type RendererReturnType = DocumentFragment | HTMLElement | string | null
 interface MyGanttElements {
   leftGrid: HTMLElement | null
   rightGrid: HTMLElement | null
@@ -19,6 +20,7 @@ interface CellData {
   $target: HTMLElement
   rowIndex: number
   value: any
+  columnIndex: number
   rowId?: string
   columnName?: string
   [key: string]: any
@@ -31,6 +33,7 @@ interface TimeBarData extends CellData {
 interface LabelRendererData {
   columnData: ColumnItem
 }
+
 
 // 醒置项
 interface MyGanttOptions {
@@ -45,8 +48,8 @@ interface MyGanttOptions {
   onClickTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onMouseoverTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onMouseleaveTimeBar?: (data: TimeBarData, e: MouseEvent) => any
-  timeBarRenderer?: (data: TimeBarData, ctx: OhMyGantt) => HTMLElement | string | null
-  timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => HTMLElement | string | null
+  timeBarRenderer?: (data: TimeBarData, ctx: OhMyGantt) => RendererReturnType
+  timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
 }
 
@@ -111,7 +114,7 @@ interface RenderTableProps {
   options: MyGanttOptions
 }
 
-declare class OhMyGantt {
+export default class OhMyGantt {
   element: Element
   data: any[]
   columns: ColumnItem[]
@@ -136,7 +139,8 @@ declare class OhMyGantt {
   _settGridAction(gridElement: HTMLElement): void;
   _handleActionCell(e: MouseEvent, action: HandleMouseAction): void;
   _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction): void;
-  _getCellData($target: HTMLElement): CellData
+  _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
   _getTimeBarData($target: HTMLElement): TimeBarData
   getRowDataByIndex(index: number): any
+}
 }

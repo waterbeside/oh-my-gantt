@@ -66,6 +66,9 @@
       position: relative;
       text-align: center;
       border-bottom: none;
+      & > .cell {
+        padding: 0;
+      }
     }
   }
 
@@ -74,8 +77,21 @@
     height: 50px;
     box-sizing: border-box;
     border: 1px solid #ccc;
+    text-overflow: ellipsis;
+    text-align: left;
     &:last-child {
       border-right: none;
+    }
+    & > .cell {
+      position: relative;
+      padding: 0 8px;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      overflow: hidden;
     }
   }
   &__header-wrapper {
@@ -116,5 +132,6 @@
     justify-content: center;
     align-items: center;
     color: #fff;
+
   }
 }

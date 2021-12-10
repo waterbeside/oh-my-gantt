@@ -18,30 +18,48 @@ export function debounce(
   }
 }
 
+export function syncScrollFn(source: HTMLElement, target: HTMLElement | HTMLElement[], e: Event) {
+  if (Array.isArray(target)) {
+    for (const item of target) {
+      item.scrollTop = source.scrollTop
+    }
+  } else {
+    target.scrollTop = source.scrollTop
+  }
+}
+
 /**
  * 同步容器滚动
  * @param source 源容器
  * @param target 目标
  */
-export function syncScroll(source: HTMLElement, target: HTMLElement | HTMLElement[]) {
-  source.onscroll = (e) => {
-    if (Array.isArray(target)) {
-      for (const item of target) {
-        item.scrollTop = source.scrollTop
-      }
-    } else {
-      target.scrollTop = source.scrollTop
+export function syncScroll(left: HTMLElement, right: HTMLElement) {
+  const scrollFns = {
+    left: (e: Event) => {
+      syncScrollFn(left, right, e)
+    },
+    right: (e: Event) => {
+      syncScrollFn(right, left, e)
     }
   }
+  
+  const syncScrollBase = (sourceName: 'left' | 'right' ) => {
+    const source = sourceName === 'left' ? left : right
+    const target = sourceName === 'right' ? left : right
+    const scrollFnForLeft = sourceName === 'left' ? scrollFns.left : scrollFns.right
+    const scrollFnForRight = sourceName === 'right' ? scrollFns.left : scrollFns.right
+    source.addEventListener('scroll', scrollFnForLeft)
+    const emitScroll = (e: Event) => {
+      source.removeEventListener('scroll', scrollFnForLeft)
+      target.removeEventListener('scroll', scrollFnForRight)
+      source.addEventListener('scroll', scrollFnForLeft)
+    }
+    source.addEventListener('mouseenter', emitScroll)
+    source.addEventListener('touchstart', emitScroll)
+  }  
+  syncScrollBase('left')
+  syncScrollBase('right')
 }
-
-export function syncScrollAll(elements: HTMLElement[]) {
-  elements.forEach(item => {
-    const target = elements.filter(item2 => item !== item2)
-    syncScroll(item, target)
-  })
-}
-
 
 
 /**
