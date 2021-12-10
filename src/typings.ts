@@ -34,6 +34,15 @@ interface LabelRendererData {
   columnData: ColumnItem
 }
 
+interface GridScrollData {
+  datagrid: ScrollData
+  timegrid: ScrollData
+}
+interface ScrollData {
+  scrollLeft: number
+  scrollTop: number
+}
+
 
 // 醒置项
 interface MyGanttOptions {
@@ -56,6 +65,7 @@ interface MyGanttOptions {
   onDragstartTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onDragendTimeBar?: (data: TimeBarData, e: MouseEvent) => any
   onDragTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onScroll?: (data: GridScrollData, e: Event) => any
   timeBarRenderer?: (data: TimeBarData, ctx: OhMyGantt) => RendererReturnType
   timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
@@ -146,8 +156,8 @@ declare class OhMyGantt {
   listenScroll(left: HTMLElement, right: HTMLElement): void;
   getScrollTop(): number;
   _settGridAction(gridElement: HTMLElement): void;
-  _handleActionCell(e: Event, action: HandleMouseAction | HandleDragAction): void;
-  _handleActionTimeBar(e: Event, action: HandleMouseAction | HandleDragAction): void;
+  _handleActionCell(e: MouseEvent, action: HandleMouseAction): void;
+  _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction): void;
   _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
   _getTimeBarData($target: HTMLElement): TimeBarData
   getRowDataByIndex(index: number): any

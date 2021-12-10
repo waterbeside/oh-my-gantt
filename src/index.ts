@@ -115,8 +115,31 @@ export default class OhMyGantt {
     if (!leftBdScroll || !rightBdScroll) {
       throw new Error('Invalid element provided')
     }
-
     syncScroll(leftBdScroll, rightBdScroll)
+    const getScrollData = (): GridScrollData => {
+      return {
+        datagrid: {
+          scrollTop: leftBdScroll.scrollTop,
+          scrollLeft: left.scrollLeft
+        },
+        timegrid: {
+          scrollTop: rightBdScroll.scrollTop,
+          scrollLeft: right.scrollLeft
+        }
+      }
+    }
+    if (typeof this.options.onScroll === 'function') {
+      const onScrollFn = this.options.onScroll
+      leftBdScroll.addEventListener('scroll', (e) => {
+        onScrollFn(getScrollData(), e)
+      })
+      left.addEventListener('scroll', (e) => {
+        onScrollFn(getScrollData(), e)
+      })
+      right.addEventListener('scroll', (e) => {
+        onScrollFn(getScrollData(), e)
+      })
+    }
   }
 
   getScrollTop() {
@@ -131,13 +154,13 @@ export default class OhMyGantt {
         $gridElm.addEventListener(actionName, (e: Event) => {
           this._handleActionCell(e, actionName as any, isTimeGrid)
         })
-      });
+      })
       const dragTimeBarActionNames = ['dragstart', 'dragend', 'drag']
       dragTimeBarActionNames.forEach(actionName => {
         $gridElm.addEventListener(actionName, (e: Event) => {
           this._handleActionTimeBar(e, actionName as any)
         })
-      });
+      })
     }
 
     $gridElm.addEventListener('click', (e: MouseEvent) => {
@@ -154,7 +177,7 @@ export default class OhMyGantt {
     })
   }
 
-  _handleActionCell(e: Event, action: HandleMouseAction | HandleDragAction= 'click', isTimeGrid = false) {
+  _handleActionCell(e: Event, action: HandleMouseAction | HandleDragAction = 'click', isTimeGrid = false) {
     const target = e.target as HTMLElement
     const actionFunNames: any = {
       click: 'onClickCell',
@@ -164,7 +187,6 @@ export default class OhMyGantt {
       dragover: 'onDragoverCell',
       dragleave: 'onDragleaveCell',
       dragenter: 'onDragenterCell'
-
     }
     // 点击单元格
     const $target = target.closest('.omg-grid__cell') as HTMLElement
@@ -195,7 +217,6 @@ export default class OhMyGantt {
         return res
       }
     }
-    
   }
 
   _getCellData($target: HTMLElement, isTimeGrid = false,): CellData {
