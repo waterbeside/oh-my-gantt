@@ -185,27 +185,29 @@ export function hashCode(str: string): number {
  * @returns  number | false
  */
 export function computeTimeLeft(time: Date | string, ctx: OhMyGantt, returnPercent = false): number | false {
-  const { options, $elements, startTime, endTime } = ctx
+  const { options, $elements, timeList } = ctx
   const $timeGrid = $elements.timeGrid
   if (!$timeGrid ) {
     return false
   }
   const timeGridInnerWidth = $timeGrid.querySelector('.omg-grid__inner')?.getBoundingClientRect().width
-  const startTimeStamp = startTime.getTime()
-  const endTimeStamp = endTime.getTime()
+  const timeCellWidth = options.timeCellWidth
+  const startTimeStamp = timeList[0].getTime()
+  const endTimeStamp = timeList[timeList.length - 1].getTime()
   const timeStamp = toDate(time).getTime()
   let timeLeft = 0
   if (timeStamp < startTimeStamp || timeStamp > endTimeStamp) {
     return false
   }
   const timeLeftPrecent = (timeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
-  if (returnPercent){
-    return timeLeftPrecent
-  }
+  
   if (!timeGridInnerWidth) {
     return false
   }
-  timeLeft = timeLeftPrecent * timeGridInnerWidth
+  timeLeft = timeLeftPrecent * (timeGridInnerWidth - timeCellWidth)
+  if (returnPercent){
+    return timeLeft / timeGridInnerWidth
+  }
   return timeLeft
 }
 
