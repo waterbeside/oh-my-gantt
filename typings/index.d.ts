@@ -64,6 +64,7 @@ interface MyGanttOptions {
   startTime: Date | string
   endTime: Date | string
   columns: ColumnItem[]
+  dataGridWidth?: number
   timeCellWidth?: number
   timeInterval?: TimeInterval
   timebarGap?: [number, number]
@@ -90,6 +91,7 @@ interface MyGanttOptions {
 }
 
 interface MyGanttOptionsMerge extends MyGanttOptions {
+  dataGridWidth: number
   timeCellWidth: number
   timeInterval: TimeInterval
   timebarGap: [number, number]
