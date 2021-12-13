@@ -1,6 +1,6 @@
 import { renderTableCell } from './tableCell'
-import { renderTimeBar } from './timeBar'
-import { computeTimeBar } from '../utils/helper'
+import { renderTimebar } from './timebar'
+import { computeTimebar } from '../utils/helper'
 import { toDate, getTimeIntervarFormatter, dateFormat } from '../utils/dateHelper'
 
 /**
@@ -86,27 +86,42 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
   const fragment = document.createDocumentFragment()
   const rowData = props.rowData
 
-  const timeBarData = computeTimeBar({startTime: rowData.startTime, endTime: rowData.endTime}, ctx)
 
   let timeIntervalFormatter = 'YYYY-MM-DD HH:mm:ss'
   if (typeof options.timeInterval === 'string') {
     timeIntervalFormatter = getTimeIntervarFormatter(ctx.options.timeInterval, true)
   }
-  const startTimeStamp = toDate(dateFormat(rowData.startTime, timeIntervalFormatter)).getTime()
+  const timebarSettings = rowData.timebar || []
+  console.log('timebarSettings', timebarSettings)
 
   props.columns.forEach((column: any, index: number) => {
     const cellProps: any = { columnName: column.name, columnIndex: index }
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
     }
-    if (column.name === startTimeStamp) {
-      const timeBarProps = {
-        width: timeBarData.width - options.timeBarGap[1] * 2,
-        rowData,
-        timeColumnsIndex: timeBarData.timeColumnsIndex
+    timebarSettings.forEach((timebarSetting: any, timebarSettingIndex: number) => {
+      const startTimeStamp = toDate(dateFormat(timebarSetting.from, timeIntervalFormatter)).getTime()
+      if (startTimeStamp === column.name) {
+        const timebarData = computeTimebar({from: timebarSetting.from, to: timebarSetting.to}, ctx)
+
+        const timebarProps = {
+          width: timebarData.width - options.timebarGap[1] * 2,
+          rowData,
+          timeColumnsIndex: timebarData.timeColumnsIndex,
+          timebarIndex: timebarSettingIndex,
+          timebarItemData: timebarSetting
+        }
+        cellProps.children =  renderTimebar(timebarProps, ctx)   
       }
-      cellProps.children =  renderTimeBar(timeBarProps, ctx)      
-    }
+    })
+    // if (column.name === startTimeStamp) {
+    //   const timebarProps = {
+    //     width: timebarData.width - options.timebarGap[1] * 2,
+    //     rowData,
+    //     timeColumnsIndex: timebarData.timeColumnsIndex
+    //   }
+    //   cellProps.children =  renderTimebar(timebarProps, ctx)      
+    // }
     fragment.appendChild(renderTableCell(cellProps, ctx))
   })
   return fragment

@@ -26,8 +26,9 @@ interface CellData {
   [key: string]: any
 }
 
-interface TimeBarData extends CellData {
+interface TimebarData extends CellData {
   timeColumnsIndex: number[]
+  timebarItemData: TimebarSetting
 }
 
 interface LabelRendererData {
@@ -43,6 +44,18 @@ interface ScrollData {
   scrollTop: number
 }
 
+interface TimebarSetting {
+  from: Date | string
+  to: Date | string
+  desc?: string
+  color?: string
+  [key: string]: any
+}
+
+interface MyGanttDataItme {
+  timebar: TimebarSetting[]
+  [key: string]: any
+}
 
 // 醒置项
 interface MyGanttOptions {
@@ -51,22 +64,23 @@ interface MyGanttOptions {
   columns: ColumnItem[]
   timeCellWidth?: number
   timeInterval?: TimeInterval
-  timeBarGap?: [number, number]
-  timeBarHeight?: number | null
+  timebarGap?: [number, number]
+  timebarHeight?: number | null
   timeaBarDraggable?: boolean
+  data: MyGanttDataItme[]
   onClickCell?: (data: CellData, e: MouseEvent) => any
-  onClickTimeBar?: (data: TimeBarData, e: MouseEvent) => any
-  onMouseoverTimeBar?: (data: TimeBarData, e: MouseEvent) => any
-  onMouseleaveTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onClickTimebar?: (data: TimebarData, e: MouseEvent) => any
+  onMouseoverTimebar?: (data: TimebarData, e: MouseEvent) => any
+  onMouseleaveTimebar?: (data: TimebarData, e: MouseEvent) => any
   onDropCell?: (data: CellData, e: MouseEvent) => any
   onDragoverCell?: (data: CellData, e: MouseEvent) => any
   onDragleaveCell?: (data: CellData, e: MouseEvent) => any
   onDragenterCell?: (data: CellData, e: MouseEvent) => any
-  onDragstartTimeBar?: (data: TimeBarData, e: MouseEvent) => any
-  onDragendTimeBar?: (data: TimeBarData, e: MouseEvent) => any
-  onDragTimeBar?: (data: TimeBarData, e: MouseEvent) => any
+  onDragstartTimebar?: (data: TimebarData, e: MouseEvent) => any
+  onDragendTimebar?: (data: TimebarData, e: MouseEvent) => any
+  onDragTimebar?: (data: TimebarData, e: MouseEvent) => any
   onScroll?: (data: GridScrollData, e: Event) => any
-  timeBarRenderer?: (data: TimeBarData, ctx: OhMyGantt) => RendererReturnType
+  timebarRenderer?: (data: TimebarData, ctx: OhMyGantt) => RendererReturnType
   timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
 }
@@ -74,19 +88,19 @@ interface MyGanttOptions {
 interface MyGanttOptionsMerge extends MyGanttOptions {
   timeCellWidth: number
   timeInterval: TimeInterval
-  timeBarGap: [number, number]
-  timeBarHeight: number | null
+  timebarGap: [number, number]
+  timebarHeight: number | null
   timeaBarDraggable: boolean
 }
 
-// helper - computeTimeBar方法的 参数
-interface ComputeTimeBarProps {
-  startTime: string
-  endTime: string
+// helper - computeTimebar方法的 参数
+interface ComputeTimebarProps {
+  from: string
+  to: string
 }
 
-// helper - computeTimeBar 方法的返回值
-interface ComputeTimeBarReturn {
+// helper - computeTimebar 方法的返回值
+interface ComputeTimebarReturn {
   width: number
   timeColumns: ColumnItem[]
   timeColumnsIndex: number[]
@@ -114,13 +128,15 @@ interface RenderTableRowProps {
   isTimeGrid?: boolean
 }
 
-// renderer - renderTimeBar 参数
-interface RenderTimeBarProps {
+// renderer - renderTimebar 参数
+interface RenderTimebarProps {
   width: number
   rowData: any
   rowIndex?: number | string
   rowId?: number | string
   timeColumnsIndex: number[]
+  timebarIndex: number
+  timebarItemData: TimebarSetting
 }
 
 // renderer - renderTaber 参数
@@ -156,10 +172,10 @@ declare class OhMyGantt {
   listenScroll(left: HTMLElement, right: HTMLElement): void;
   getScrollTop(): number;
   _settGridAction(gridElement: HTMLElement): void;
-  _handleActionCell(e: MouseEvent, action: HandleMouseAction): void;
-  _handleActionTimeBar(e: MouseEvent, action: HandleMouseAction): void;
+  _handleActionCell(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void;
+  _handleActionTimebar(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void;
   _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
-  _getTimeBarData($target: HTMLElement): TimeBarData
+  _getTimebarData($target: HTMLElement): TimebarData
   getRowDataByIndex(index: number): any
   createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }

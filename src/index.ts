@@ -4,9 +4,10 @@ import { toDate, getTimeList } from './utils/dateHelper'
 import { renderTable } from './renderer/index'
 
 
+
 export default class OhMyGantt {
   element: Element
-  data: any[] = [] // 数据
+  data: MyGanttDataItme[] = [] // 数据
   columns: ColumnItem[] = [] // 要显示的列
   timeColumns: ColumnItem[] = [] // 时间列
   timeList: Array<Date> = [] // 时间列表
@@ -24,9 +25,9 @@ export default class OhMyGantt {
       timeCellWidth: 120,
       leftWidth: 240,
       timeInterval: 'day',
-      timeBarGap: [4, 4],
-      timeBarHeight: 20,
-      timeBarDraggable: false,
+      timebarGap: [4, 4],
+      timebarHeight: 20,
+      timebarDraggable: false,
     }
     const opt: MyGanttOptionsMerge = {
       ...defaultOptions,
@@ -148,29 +149,29 @@ export default class OhMyGantt {
 
   _settGridAction($gridElm: HTMLElement, isTimeGrid = false) {
     // 当允许拖拽时，添加拖拽相关事件
-    if (this.options.timeBarDraggable && isTimeGrid) {
+    if (this.options.timebarDraggable && isTimeGrid) {
       const dropCellActionNames = ['drop', 'dragover', 'dragleave', 'dragenter']
       dropCellActionNames.forEach(actionName => {
         $gridElm.addEventListener(actionName, (e: Event) => {
           this._handleActionCell(e, actionName as any, isTimeGrid)
         })
       })
-      const dragTimeBarActionNames = ['dragstart', 'dragend', 'drag']
-      dragTimeBarActionNames.forEach(actionName => {
+      const dragTimebarActionNames = ['dragstart', 'dragend', 'drag']
+      dragTimebarActionNames.forEach(actionName => {
         $gridElm.addEventListener(actionName, (e: Event) => {
-          this._handleActionTimeBar(e, actionName as any)
+          this._handleActionTimebar(e, actionName as any)
         })
       })
     }
 
     $gridElm.addEventListener('click', (e: MouseEvent) => {
-      if (isTimeGrid && this._handleActionTimeBar(e, 'click')) {
+      if (isTimeGrid && this._handleActionTimebar(e, 'click')) {
         return
       }
       this._handleActionCell(e, 'click', isTimeGrid)
     })
     $gridElm.addEventListener('mouseover', (e: MouseEvent) => {
-      if (isTimeGrid && this._handleActionTimeBar(e, 'mouseover')) {
+      if (isTimeGrid && this._handleActionTimebar(e, 'mouseover')) {
         return
       } 
       this._handleActionCell(e, 'mouseover', isTimeGrid)
@@ -197,23 +198,23 @@ export default class OhMyGantt {
     }
   }
 
-  _handleActionTimeBar(e: Event, action: HandleMouseAction | HandleDragAction = 'click') {
+  _handleActionTimebar(e: Event, action: HandleMouseAction | HandleDragAction = 'click') {
     const target = e.target as HTMLElement
     const actionFunNames: any = {
-      click: 'onClickTimeBar',
-      mouseover: 'onMouseoverTimeBar',
-      mouseleave: 'onMouseleaveTimeBar',
-      dragstart: 'onDragstartTimeBar',
-      dragend: 'onDragendTimeBar',
-      drag: 'onDragTimeBar'
+      click: 'onClickTimebar',
+      mouseover: 'onMouseoverTimebar',
+      mouseleave: 'onMouseleaveTimebar',
+      dragstart: 'onDragstartTimebar',
+      dragend: 'onDragendTimebar',
+      drag: 'onDragTimebar'
     }
     // 点击单元格
-    const $target = target.closest('.omg-grid__time-bar') as HTMLElement
+    const $target = target.closest('.omg-grid__timebar') as HTMLElement
     if ($target) {
       const $cellTarget = $target.closest('.omg-grid__cell')
       if ($cellTarget && actionFunNames[action] && typeof this.options[actionFunNames[action]] !== 'undefined') {
-        const timeBarData: TimeBarData = this._getTimeBarData($target)
-        const res = this.options[actionFunNames[action]](timeBarData, e)
+        const timebarData: TimebarData = this._getTimebarData($target)
+        const res = this.options[actionFunNames[action]](timebarData, e)
         return res
       }
     }
@@ -241,15 +242,17 @@ export default class OhMyGantt {
     }
   }
 
-  _getTimeBarData($target: HTMLElement): TimeBarData {
+  _getTimebarData($target: HTMLElement): TimebarData {
     const $cellTarget = $target.closest('.omg-grid__cell') as HTMLElement
     const cellData = this._getCellData($cellTarget, true)
-    const timeBarData: TimeBarData = {
+    const timebarIndex = $target.dataset.timebarIndex
+    const timebarData: TimebarData = {
       ...cellData,
       $target,
-      timeColumnsIndex: $target.dataset.timeColumnsIndex?.split(',').map(Number) || []
+      timeColumnsIndex: $target.dataset.timeColumnsIndex?.split(',').map(Number) || [],
+      timebarItemData: timebarIndex ? cellData.rowData?.timebar[timebarIndex] : null
     }
-    return timeBarData
+    return timebarData
   }
 
   getRowDataByIndex(index: number) {
@@ -257,6 +260,14 @@ export default class OhMyGantt {
       return null
     }
     return this.data[index]
+  }
+
+  getRowDataById(id: string) {
+    if (!id) {
+      return null
+    }
+    const rowData = this.data.find(row => row.id === id)
+    return rowData
   }
 
   createElement = createElement
