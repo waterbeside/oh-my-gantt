@@ -113,6 +113,7 @@ $primaryColor: #0086d4;
     height: calc(100% - 80px);
     margin-top: -1px;
     overflow-y: auto;
+    @include scrollbar;
   }
 
   &__body { // table
