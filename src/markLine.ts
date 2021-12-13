@@ -11,8 +11,7 @@ export default class OhMarkLine {
   $element: HTMLElement
   constructor(options: OhMarkLineOptions) {
     const defaultOptions: any = {
-      grid: 120,
-      leftWidth: 240,
+      grid: 120
     }
     const opt: OhMarkLineOptionsExtendDefault = {
       ...defaultOptions,
