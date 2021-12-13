@@ -2,9 +2,11 @@ type TimeInterval = 'day' | 'hour' | 'week' | 'month' | 'year' | number
 type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave' | 'dragstart' 
 type HandleDragAction = 'dragend' | 'drag' | 'dragenter' | 'dragover' | 'dropleave'| 'drop'
 type RendererReturnType = DocumentFragment | HTMLElement | string | null
+
+
 interface MyGanttElements {
-  leftGrid: HTMLElement | null
-  rightGrid: HTMLElement | null
+  dataGrid: HTMLElement | null
+  timeGrid: HTMLElement | null
 }
 
 interface ColumnItem {
@@ -58,8 +60,8 @@ interface MyGanttDataItme {
 
 // 醒置项
 interface MyGanttOptions {
-  start: Date | string
-  end: Date | string
+  startTime: Date | string
+  endTime: Date | string
   columns: ColumnItem[]
   timeCellWidth?: number
   timeInterval?: TimeInterval
@@ -154,28 +156,54 @@ declare class OhMyGantt {
   columns: ColumnItem[]
   timeColumns: ColumnItem[]
   timeList: Array<Date>
-  timeListStart: Date
-  timeListEnd: Date
+  startTime: Date
+  endTime: Date
   options: MyGanttOptionsMerge
   $elements: MyGanttElements
-  constructor(element: Element | string, options: MyGanttOptions);
-  render(): void;
+  constructor(element: Element | string, options: MyGanttOptions)
+  render(): void
   /**
    * 渲染左侧表格
    */
-  renderLeftGrid(): [HTMLElement, number];
+  renderDataGrid(): [HTMLElement, number]
   /**
    * 渲染右侧表格
    */
-  renderRightGrid(): [HTMLElement, number];
-  listenScroll(left: HTMLElement, right: HTMLElement): void;
-  getScrollTop(): number;
-  _settGridAction(gridElement: HTMLElement): void;
-  _handleActionCell(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void;
-  _handleActionTimebar(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void;
+  renderTimeGrid(): [HTMLElement, number]
+  listenScroll(left: HTMLElement, right: HTMLElement): void
+  getScrollTop(): number
+  _settGridAction(gridElement: HTMLElement): void
+  _handleActionCell(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void
+  _handleActionTimebar(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void
   _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
   _getTimebarData($target: HTMLElement): TimebarData
   getRowDataByIndex(index: number): any
   getRowDataById(index: number | string): any
   createElement(tag: string, props: any, ...children: any[]): HTMLElement
+  setMarkLine(markLine: MarkLine): void
+  removeMarkLine(markLine: MarkLine): void
+  scrollToTime(time: Date | string): void
+}
+
+
+
+interface OhMarkLineOptions {
+  grid?: 'time' | 'data'
+  derection?: 'horizontal' | 'vertical'
+  time?: Date
+  label: string
+  color?: string
+  lineStyle?: 'solid' | 'dashed' | 'dotted'
+  lineWidth?: number
+}
+
+interface OhMarkLineOptionsExtendDefault extends OhMarkLineOptions {
+  grid: 'time' | 'data'
+  derection: 'horizontal' | 'vertical'
+}
+declare class MarkLine {
+  options: OhMarkLineOptionsExtendDefault
+  id: string
+  $element: HTMLElement
+  constructor(options: OhMarkLineOptions)
 }

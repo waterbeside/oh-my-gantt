@@ -1,4 +1,5 @@
 import { toDate, getTimeIntervarFormatter, dateFormat, getTimeListInterval } from './dateHelper'
+import MarkLine from '../markLine'
 
 /**
  * 防抖
@@ -156,7 +157,7 @@ export function createElement(tag: string, props: any, ...children: any[]): HTML
   return element
 }
 
-export function createRowIdent(row: any) {
+export function createIdent(row: any) {
   const jsonstr = JSON.stringify(row)
   const hc = ('0000000000' + Math.abs(hashCode(jsonstr))).slice(-9)
   const now = (Date.now() + Number(Math.random().toString().slice(-6))).toString().slice(-9)
@@ -173,4 +174,60 @@ export function hashCode(str: string): number {
     hash |= 0 // Convert to 32bit integer
   }
   return hash
+}
+
+
+/**
+ * 输入一个时间，计算该时间在时间表格中的位置
+ * @param time 时间
+ * @param ctx OhMyGantt实例
+ * @param returnPercent 是否返回百分比
+ * @returns  number | false
+ */
+export function computeTimeLeft(time: Date | string, ctx: OhMyGantt, returnPercent = false): number | false {
+  const { options, $elements, startTime, endTime } = ctx
+  const $timeGrid = $elements.timeGrid
+  if (!$timeGrid ) {
+    return false
+  }
+  const timeGridInnerWidth = $timeGrid.querySelector('.omg-grid__inner')?.getBoundingClientRect().width
+  const startTimeStamp = startTime.getTime()
+  const endTimeStamp = endTime.getTime()
+  const timeStamp = toDate(time).getTime()
+  let timeLeft = 0
+  if (timeStamp < startTimeStamp || timeStamp > endTimeStamp) {
+    return false
+  }
+  const timeLeftPrecent = (timeStamp - startTimeStamp) / (endTimeStamp - startTimeStamp)
+  if (returnPercent){
+    return timeLeftPrecent
+  }
+  if (!timeGridInnerWidth) {
+    return false
+  }
+  timeLeft = timeLeftPrecent * timeGridInnerWidth
+  return timeLeft
+}
+
+
+/**
+ * 计算markline离左边的距离
+ * @param markLine markLine对象
+ * @param ctx OhMyGantt对象
+ * @returns  number | false
+ */
+export function computeMarkLineLeft(markLine: MarkLine, ctx: OhMyGantt): number | false {
+  const mkOptions = markLine.options
+  if (mkOptions.derection === 'vertical') { // 本方法只计算垂直方向的markline
+    if (mkOptions.grid === 'time') { // 如果是时间表格
+      const markLineTime = mkOptions.time ? mkOptions.time : null
+      if (!markLineTime) {
+        return false
+      }
+      const timeLeft = computeTimeLeft(markLineTime, ctx, true)
+      return timeLeft
+    }
+  }
+  
+  return false
 }

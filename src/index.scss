@@ -3,6 +3,10 @@
 
 // overflow-x: hidden;
 
+$borderColor: #e0e0e0;
+$primaryColor: #0086d4;
+
+
 @mixin scrollbar {
   &::-webkit-scrollbar {
     width: 0px;
@@ -55,8 +59,9 @@
   &__header {  // table
     @include tableBase;
     height: 80px;
-    background: #f5f5f5;
-    border-bottom: 2px solid #ccc;
+    background: #f9f9f9;
+    color: #888;
+    border-bottom: 1px solid #ccc;
     font-weight: bold;
     
     .omg-grid__row:last-child {
@@ -76,7 +81,7 @@
     width: 100px;
     height: 50px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 1px solid $borderColor;
     text-overflow: ellipsis;
     text-align: left;
     &:last-child {
@@ -118,7 +123,7 @@
 }
 
 .omg-grid-timegrid {
-  border-left: 2px solid #ccc;
+  border-left: 2px solid $borderColor;
   flex:1;
   height: 100%;
   .omg-grid__cell {
@@ -130,7 +135,7 @@
     top: 0;
     bottom: 0;
     font-size: 12px;
-    background: rgba(0, 170, 255, 0.923);
+    background: rgba($primaryColor, 0.923);
     border-radius: 4px;
     display: flex;
     justify-content: center;
@@ -149,14 +154,14 @@
   z-index: 1000;
   background: #fff;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid #ccc;
+  border: 1px solid $borderColor;
   border-radius: 5px;
   &__arrow {
     box-sizing: border-box;
     width: 20px;
     height: 20px;
     background: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid $borderColor;
     position: absolute;
     left: 50%;
     transform: translateX(-50%) rotate(-45deg);
@@ -164,4 +169,32 @@
     top: -10px;
     z-index: 1;
   }
+}
+
+.omg-markline {
+  --color: $primaryColor;
+  --line-style: solid;
+  --line-width: 1px;
+  position: absolute;
+  z-index: 10;
+  color: #fff;
+
+  &__label {
+    position: absolute;
+    background-color: var(--color);
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
+.omg-markline--vertical {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  height: 100%;
+  border-left: var(--line-width) var(--line-style) var(--color);
 }

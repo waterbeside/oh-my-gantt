@@ -1,24 +1,30 @@
 
-import { syncScroll, computeTimeColumnLabel, createElement, createRowIdent } from './utils/helper'
+import {
+  syncScroll,
+  computeTimeColumnLabel,
+  createElement,
+  createIdent,
+  computeMarkLineLeft,
+  computeTimeLeft
+} from './utils/helper'
 import { toDate, getTimeList } from './utils/dateHelper'
 import { renderTable } from './renderer/index'
-import data from '../../../../kanban01/src/mock/data/getYarnDateList';
+import MarkLine from './markLine'
 
-
-
-export default class OhMyGantt {
+export { MarkLine }
+export class OhMyGantt {
   element: Element
   data: MyGanttDataItme[] = [] // 数据
   columns: ColumnItem[] = [] // 要显示的列
   timeColumns: ColumnItem[] = [] // 时间列
   timeList: Array<Date> = [] // 时间列表
-  timeListStart: Date = new Date()
-  timeListEnd: Date = new Date()
+  startTime: Date = new Date()
+  endTime: Date = new Date()
 
   options: MyGanttOptionsMerge
   $elements: MyGanttElements = {
-    leftGrid: null,
-    rightGrid: null
+    dataGrid: null,
+    timeGrid: null
   }
 
   constructor(element: Element | string, options: MyGanttOptions) {
@@ -44,17 +50,17 @@ export default class OhMyGantt {
     this.data = opt.data.map(item => {
       return {
         ...item,
-        id: item.id || createRowIdent(item)
+        id: item.id || createIdent(item)
       }
     })
 
-    console.log('this.data', this.data)
+    // console.log('this.data', this.data)
 
-    this.timeListStart = toDate(opt.start)
-    this.timeListEnd = toDate(opt.end)
+    this.startTime = toDate(opt.startTime)
+    this.endTime = toDate(opt.endTime)
 
     // 初始化日期列表
-    this.timeList = getTimeList(opt.start, opt.end, options.timeInterval)
+    this.timeList = getTimeList(this.startTime, this.endTime, options.timeInterval)
     this.render()
     if (this.options.onCreated) {
       this.options.onCreated(this)
@@ -65,9 +71,9 @@ export default class OhMyGantt {
   render() {
     // 创建
     this.element.innerHTML = ''
-    const [$leftGrid] = this.renderLeftGrid()
-    const [$rightGrid] = this.renderRightGrid()
-    this.listenScroll($leftGrid, $rightGrid) // 同步滚动
+    const [$dataGrid] = this.renderDataGrid()
+    const [$timeGrid] = this.renderTimeGrid()
+    this.listenScroll($dataGrid, $timeGrid) // 同步滚动
     if (this.options.onRendered) {
       this.options.onRendered(this)
     }
@@ -76,25 +82,25 @@ export default class OhMyGantt {
   /**
    * 渲染左侧表格
    */
-  renderLeftGrid(): [HTMLElement, number] {
-    const [$leftGrid, dataGridInnerWidth] = renderTable({
+  renderDataGrid(): [HTMLElement, number] {
+    const [$dataGrid, dataGridInnerWidth] = renderTable({
       className: 'omg-grid-datagrid',
       columns: this.columns,
       data: this.data,
       options: this.options
     }, this)
     const leftWidth = this.options.leftWidth > dataGridInnerWidth ? dataGridInnerWidth : this.options.leftWidth
-    $leftGrid.style.width = `${leftWidth}px`
-    this.element.appendChild($leftGrid)
-    this.$elements.leftGrid = $leftGrid
-    this._settGridAction($leftGrid, false)
-    return [$leftGrid, dataGridInnerWidth]
+    $dataGrid.style.width = `${leftWidth}px`
+    this.element.appendChild($dataGrid)
+    this.$elements.dataGrid = $dataGrid
+    this._settGridAction($dataGrid, false)
+    return [$dataGrid, dataGridInnerWidth]
   }
 
   /**
    * 渲染右侧表格
    */
-  renderRightGrid(): [HTMLElement, number] {
+  renderTimeGrid(): [HTMLElement, number] {
     const timeColumns: any[] = []
     for (const date of this.timeList) {
       timeColumns.push({
@@ -106,7 +112,7 @@ export default class OhMyGantt {
     }
     this.timeColumns = timeColumns
 
-    const [$rightGrid, timeGridInnerWidth] = renderTable({
+    const [$timeGrid, timeGridInnerWidth] = renderTable({
       className: 'omg-grid-timegrid',
       columns: timeColumns,
       data: this.data,
@@ -114,10 +120,10 @@ export default class OhMyGantt {
       isTimeGrid: true
     }, this)
     
-    this.element.appendChild($rightGrid)
-    this.$elements.rightGrid = $rightGrid
-    this._settGridAction($rightGrid, true)
-    return [$rightGrid, timeGridInnerWidth]
+    this.element.appendChild($timeGrid)
+    this.$elements.timeGrid = $timeGrid
+    this._settGridAction($timeGrid, true)
+    return [$timeGrid, timeGridInnerWidth]
   }
   
 
@@ -158,7 +164,7 @@ export default class OhMyGantt {
   }
 
   getScrollTop() {
-    return this.$elements.leftGrid?.querySelector('.omg-grid__body-wrapper')?.scrollTop || 0
+    return this.$elements.dataGrid?.querySelector('.omg-grid__body-wrapper')?.scrollTop || 0
   }
 
   _settGridAction($gridElm: HTMLElement, isTimeGrid = false) {
@@ -282,6 +288,34 @@ export default class OhMyGantt {
     }
     const rowData = this.data.find(row => row.id === id)
     return rowData
+  }
+
+  setMarkLine(markLine: MarkLine) {
+    const $markLine = markLine.$element
+    const mkOptions = markLine.options
+    if (mkOptions.derection === 'vertical') {
+      const left = computeMarkLineLeft(markLine, this)
+      if (left !== false) {
+        $markLine.style.left = mkOptions.time ?  `${left * 100}%` : `${left}px`
+        if (mkOptions.grid === 'time') {
+          this.$elements.timeGrid?.querySelector('.omg-grid__inner')?.appendChild($markLine)
+        }
+      }
+    }
+  }
+
+  removeMarkLine(markLine: MarkLine) {
+    const mkOptions = markLine.options
+    const $markLine = markLine.$element
+    $markLine.remove()
+  }
+
+  scrollToTime(time: Date | string) {
+    const left = computeTimeLeft(time, this, false)
+    const $timeGrid = this.$elements.timeGrid
+    if (left !== false && $timeGrid) {
+      $timeGrid.scrollLeft = left
+    }
   }
 
   createElement = createElement
