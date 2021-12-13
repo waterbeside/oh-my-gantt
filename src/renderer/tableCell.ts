@@ -27,6 +27,9 @@ export function renderTableCell(props: RenderTableCellProps, ctx: OhMyGantt) {
     const cellElm =  document.createElement('div')
     cellElm.className = 'cell'
     cellElm.innerHTML = props.text
+    if (props.text !=='') {
+      cellElm.setAttribute('title', props.text)
+    }
     tableCellElm.appendChild(cellElm)
   }
   return tableCellElm
