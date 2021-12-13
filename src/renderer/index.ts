@@ -43,9 +43,9 @@ export function renderTable(props: RenderTableProps, ctx: OhMyGantt): [HTMLEleme
   tableInnerElm.appendChild(tableBodyWrapperElm) // 表体wrapper
 
   tableBodyWrapperElm.appendChild(tableBodyElm)
+  tableBodyElm.appendChild(renderColgroup({ columns }, ctx))
   tableBodyElm.appendChild(tableBodyTbodyElm)
 
-  tableBodyTbodyElm.appendChild(renderColgroup({ columns }, ctx))
   if (props.data && props.data.length > 0) {
     props.data.forEach((item: any, index: number) => {
       tableBodyTbodyElm.appendChild(renderTableRow({ rowData: item, rowIndex: index, columns, isTimeGrid }, ctx))
