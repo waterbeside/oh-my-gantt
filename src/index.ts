@@ -30,7 +30,7 @@ export class OhMyGantt {
   constructor(element: Element | string, options: MyGanttOptions) {
     const defaultOptions: any = {
       timeCellWidth: 120,
-      leftWidth: 240,
+      dataGridWidth: 240,
       timeInterval: 'day',
       timebarGap: [4, 4],
       timebarHeight: 20,
@@ -89,8 +89,8 @@ export class OhMyGantt {
       data: this.data,
       options: this.options
     }, this)
-    const leftWidth = this.options.leftWidth > dataGridInnerWidth ? dataGridInnerWidth : this.options.leftWidth
-    $dataGrid.style.width = `${leftWidth}px`
+    const dataGridWidth = this.options.dataGridWidth > dataGridInnerWidth ? dataGridInnerWidth : this.options.dataGridWidth
+    $dataGrid.style.width = `${dataGridWidth}px`
     this.element.appendChild($dataGrid)
     this.$elements.dataGrid = $dataGrid
     this._settGridAction($dataGrid, false)
