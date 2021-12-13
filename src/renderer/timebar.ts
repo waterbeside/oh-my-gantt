@@ -8,6 +8,7 @@ export function renderTimebar(props: RenderTimebarProps, ctx: OhMyGantt): HTMLEl
   barElm.style.width = `${props.width}px`
   barElm.dataset.timeColumnsIndex = props.timeColumnsIndex.join(',')
   barElm.dataset.timebarIndex = String(props.timebarIndex)
+  barElm.dataset.rowId = String(props.rowData.id)
 
   if (options.timebarDraggable) {
     barElm.draggable = true
@@ -39,9 +40,6 @@ export function renderTimebar(props: RenderTimebarProps, ctx: OhMyGantt): HTMLEl
       timeColumnsIndex: props.timeColumnsIndex,
       columnIndex: props.timeColumnsIndex[0],
       timebarItemData: props.timebarItemData,
-    }
-    if (props.rowId) {
-      timebarData.rowId = String(props.rowId)
     }
     const renderer = options.timebarRenderer(timebarData, ctx)
     if (renderer !== null && typeof renderer === 'string') {

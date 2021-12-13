@@ -93,6 +93,10 @@
       align-items: stretch;
       overflow: hidden;
     }
+
+  }
+  &__cell--has-timebar {
+    z-index: 1;
   }
   &__header-wrapper {
     overflow-x: hidden;
@@ -127,7 +131,7 @@
     bottom: 0;
     font-size: 12px;
     background: rgba(0, 170, 255, 0.923);
-    border-radius: 20px;
+    border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;

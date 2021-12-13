@@ -12,8 +12,11 @@ export function renderTableCell(props: RenderTableCellProps, ctx: OhMyGantt) {
     tableCellElm.classList.add(`omg-grid__cell-${props.columnName}`)
     tableCellElm.dataset.columnName = props.columnName.toString()
   }
-  if (typeof props.rowId !== 'undefined')  {
-    tableCellElm.dataset.rowId = props.rowId.toString()
+  if (props.hasTimebar) {
+    tableCellElm.classList.add('omg-grid__cell--has-timebar')
+  }
+  if (props.rowData) {
+    tableCellElm.dataset.rowId = props.rowData.id.toString()
   }
   if (typeof props.rowIndex !== 'undefined') {
     tableCellElm.dataset.rowIndex = props.rowIndex.toString()

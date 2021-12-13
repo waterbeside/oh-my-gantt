@@ -155,3 +155,22 @@ export function createElement(tag: string, props: any, ...children: any[]): HTML
   }
   return element
 }
+
+export function createRowIdent(row: any) {
+  const jsonstr = JSON.stringify(row)
+  const hc = ('0000000000' + Math.abs(hashCode(jsonstr))).slice(-9)
+  const now = (Date.now() + Number(Math.random().toString().slice(-6))).toString().slice(-9)
+  return `${hc}-${now}`
+}
+
+
+export function hashCode(str: string): number {
+  let hash = 0, i, chr
+  if (str.length === 0) return hash
+  for (i = 0; i < str.length; i++) {
+    chr   = str.charCodeAt(i)
+    hash  = ((hash << 5) - hash) + chr
+    hash |= 0 // Convert to 32bit integer
+  }
+  return hash
+}

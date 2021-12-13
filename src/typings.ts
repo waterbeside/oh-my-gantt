@@ -21,7 +21,6 @@ interface CellData {
   rowIndex: number
   value: any
   columnIndex: number
-  rowId?: string
   columnName?: string
   [key: string]: any
 }
@@ -80,6 +79,8 @@ interface MyGanttOptions {
   onDragendTimebar?: (data: TimebarData, e: MouseEvent) => any
   onDragTimebar?: (data: TimebarData, e: MouseEvent) => any
   onScroll?: (data: GridScrollData, e: Event) => any
+  onCreated?: (ctx: OhMyGantt) => any
+  onRendered?: (ctx: OhMyGantt) => any
   timebarRenderer?: (data: TimebarData, ctx: OhMyGantt) => RendererReturnType
   timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
@@ -113,7 +114,7 @@ interface RenderTableCellProps {
   text?: string
   rowData?: any
   rowIndex?: number | string
-  rowId?: number | string
+  hasTimebar?: boolean
   columnIndex: number
 }
 
@@ -124,7 +125,6 @@ interface RenderTableRowProps {
   height?: number
   rowData?: any
   rowIndex?: number | string
-  rowId?: number | string
   isTimeGrid?: boolean
 }
 
@@ -133,7 +133,6 @@ interface RenderTimebarProps {
   width: number
   rowData: any
   rowIndex?: number | string
-  rowId?: number | string
   timeColumnsIndex: number[]
   timebarIndex: number
   timebarItemData: TimebarSetting
@@ -177,5 +176,6 @@ declare class OhMyGantt {
   _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
   _getTimebarData($target: HTMLElement): TimebarData
   getRowDataByIndex(index: number): any
+  getRowDataById(index: number | string): any
   createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }

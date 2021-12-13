@@ -1,7 +1,8 @@
 
-import { syncScroll, computeTimeColumnLabel, createElement } from './utils/helper'
+import { syncScroll, computeTimeColumnLabel, createElement, createRowIdent } from './utils/helper'
 import { toDate, getTimeList } from './utils/dateHelper'
 import { renderTable } from './renderer/index'
+import data from '../../../../kanban01/src/mock/data/getYarnDateList';
 
 
 
@@ -40,7 +41,14 @@ export default class OhMyGantt {
     }
     this.element = $element
     this.columns = opt.columns
-    this.data = opt.data
+    this.data = opt.data.map(item => {
+      return {
+        ...item,
+        id: item.id || createRowIdent(item)
+      }
+    })
+
+    console.log('this.data', this.data)
 
     this.timeListStart = toDate(opt.start)
     this.timeListEnd = toDate(opt.end)
@@ -48,6 +56,9 @@ export default class OhMyGantt {
     // 初始化日期列表
     this.timeList = getTimeList(opt.start, opt.end, options.timeInterval)
     this.render()
+    if (this.options.onCreated) {
+      this.options.onCreated(this)
+    }
   }
 
   // 渲染
@@ -57,6 +68,9 @@ export default class OhMyGantt {
     const [$leftGrid] = this.renderLeftGrid()
     const [$rightGrid] = this.renderRightGrid()
     this.listenScroll($leftGrid, $rightGrid) // 同步滚动
+    if (this.options.onRendered) {
+      this.options.onRendered(this)
+    }
   }
 
   /**
@@ -224,8 +238,8 @@ export default class OhMyGantt {
     const rowIndex = Number($target.dataset.rowIndex)
     const columnName = $target.dataset.columnName
     const columnIndex = Number($target.dataset.columnIndex)
-    const rowId = $target.dataset?.rowId
-    const rowData = this.getRowDataByIndex(rowIndex)
+    const rowId = $target.dataset.rowId || 0
+    const rowData = this.getRowDataById(rowId)
     const rowHeaderElm = $target.closest('.omg-grid__row--header')
     let value = rowData && columnName && typeof rowData[columnName] !== 'undefined' ? rowData[columnName] : ''
     if (isTimeGrid && rowHeaderElm) {
@@ -262,7 +276,7 @@ export default class OhMyGantt {
     return this.data[index]
   }
 
-  getRowDataById(id: string) {
+  getRowDataById(id: string | number) {
     if (!id) {
       return null
     }

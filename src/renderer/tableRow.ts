@@ -32,9 +32,7 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
       if (typeof props.rowIndex !== 'undefined')  {
         tableRowElm.dataset.rowIndex = props.rowIndex.toString()
       }
-      if (typeof props.rowData.id !== 'undefined')  {
-        tableRowElm.dataset.rowId = props.rowData.id.toString()
-      }
+      tableRowElm.dataset.rowId = props.rowData.id.toString()
       const bodyfragment = isTimeGrid ? renderTimeGridBodyRow(props, ctx) : renderBodyRow(props, ctx)
       tableRowElm.appendChild(bodyfragment)
     }
@@ -68,13 +66,10 @@ export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): Docum
   const fragment = document.createDocumentFragment()
   const rowData = props.rowData
   props.columns.forEach((column: ColumnItem, index: number) => {
-    const cellProps: any = { columnName: column.name, columnIndex: index }
+    const cellProps: any = { columnName: column.name, columnIndex: index, rowData }
     cellProps.text = rowData[column.name]
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
-    }
-    if (typeof props.rowId !== 'undefined') {
-      cellProps.rowId = props.rowId
     }
     fragment.appendChild(renderTableCell(cellProps, ctx))
   })
@@ -92,10 +87,8 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
     timeIntervalFormatter = getTimeIntervarFormatter(ctx.options.timeInterval, true)
   }
   const timebarSettings = rowData.timebar || []
-  console.log('timebarSettings', timebarSettings)
-
   props.columns.forEach((column: any, index: number) => {
-    const cellProps: any = { columnName: column.name, columnIndex: index }
+    const cellProps: any = { columnName: column.name, columnIndex: index, hasTimebar: false, rowData}
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
     }
@@ -111,17 +104,10 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
           timebarIndex: timebarSettingIndex,
           timebarItemData: timebarSetting
         }
-        cellProps.children =  renderTimebar(timebarProps, ctx)   
+        cellProps.children =  renderTimebar(timebarProps, ctx)
+        cellProps.hasTimebar = true
       }
     })
-    // if (column.name === startTimeStamp) {
-    //   const timebarProps = {
-    //     width: timebarData.width - options.timebarGap[1] * 2,
-    //     rowData,
-    //     timeColumnsIndex: timebarData.timeColumnsIndex
-    //   }
-    //   cellProps.children =  renderTimebar(timebarProps, ctx)      
-    // }
     fragment.appendChild(renderTableCell(cellProps, ctx))
   })
   return fragment
