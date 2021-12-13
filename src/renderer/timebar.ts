@@ -47,6 +47,8 @@ export function renderTimebar(props: RenderTimebarProps, ctx: OhMyGantt): HTMLEl
     } else if (renderer !== null && typeof renderer === 'object') {
       barElm.appendChild(renderer)
     }
+  } else if (props.timebarItemData.desc !== undefined) {
+    barElm.innerHTML = props.timebarItemData.desc
   }
   return barElm
 }
