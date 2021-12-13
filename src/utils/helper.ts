@@ -79,21 +79,21 @@ export function computeInnerWidth(props: { columns: ColumnItem[]}): number {
 
 /**
  * 计算时间条长度和应在的时间起始列
- * @param {ComputeTimeBarWidthProps} props
+ * @param {ComputeTimebarWidthProps} props
  * @param {OhMyGantt} ctx 
  * @returns {number}
  */
-export function computeTimeBar(props: ComputeTimeBarProps, ctx: OhMyGantt): ComputeTimeBarReturn {
+export function computeTimebar(props: ComputeTimebarProps, ctx: OhMyGantt): ComputeTimebarReturn {
   const { options, timeColumns } = ctx
-  const { startTime, endTime } = props
+  const { from, to } = props
   const timeInterval = options.timeInterval
 
   let timeIntervalFormatter = 'YYYY-MM-DD HH:mm:ss'
   if (typeof options.timeInterval === 'string') {
     timeIntervalFormatter = getTimeIntervarFormatter(timeInterval, true)
   }
-  const startTimeStamp =  toDate(dateFormat(startTime, timeIntervalFormatter)).getTime()
-  const endTimeStamp = toDate(dateFormat(endTime, timeIntervalFormatter)).getTime()
+  const startTimeStamp =  toDate(dateFormat(from, timeIntervalFormatter)).getTime()
+  const endTimeStamp = toDate(dateFormat(to, timeIntervalFormatter)).getTime()
   
 
   // 计算占用了哪几个时间列
