@@ -32,6 +32,12 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
       if (typeof props.rowIndex !== 'undefined')  {
         tableRowElm.dataset.rowIndex = props.rowIndex.toString()
       }
+      if (props.rowData.__config) {
+        const rowConfig = props.rowData.__config
+        if (rowConfig.height) {
+          tableRowElm.style.height = `${rowConfig.height}px`
+        }
+      }
       tableRowElm.dataset.rowId = props.rowData.id.toString()
       const bodyfragment = isTimeGrid ? renderTimeGridBodyRow(props, ctx) : renderBodyRow(props, ctx)
       tableRowElm.appendChild(bodyfragment)
@@ -62,6 +68,12 @@ export function renderHeaderRow(props: RenderTableRowProps, ctx: OhMyGantt): Doc
   return fragment
 }
 
+/**
+ * 生成数据行的所有列
+ * @param props 
+ * @param ctx 
+ * @returns 
+ */
 export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): DocumentFragment {
   const fragment = document.createDocumentFragment()
   const rowData = props.rowData
@@ -76,6 +88,13 @@ export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): Docum
   return fragment
 }
 
+
+/**
+ * 创建时间表格的行
+ * @param {RenderTableRowProps} props 包含rowData, rowId, rowIndex等
+ * @param {OhMyGantt} ctx  OhMyGantt实例
+ * @returns 
+ */
 export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): DocumentFragment {
   const options = ctx.options
   const fragment = document.createDocumentFragment()
@@ -92,11 +111,12 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
     }
+    const $timebarFragment = document.createDocumentFragment() // 用于存放每列的时间条
+    // generate timebars
     timebarSettings.forEach((timebarSetting: any, timebarSettingIndex: number) => {
       const startTimeStamp = toDate(dateFormat(timebarSetting.from, timeIntervalFormatter)).getTime()
       if (startTimeStamp === column.name) {
         const timebarData = computeTimebar({from: timebarSetting.from, to: timebarSetting.to}, ctx)
-
         const timebarProps = {
           width: timebarData.width - options.timebarGap[1] * 2,
           rowData,
@@ -104,10 +124,12 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
           timebarIndex: timebarSettingIndex,
           timebarItemData: timebarSetting
         }
-        cellProps.children =  renderTimebar(timebarProps, ctx)
+        $timebarFragment.appendChild(renderTimebar(timebarProps, ctx))
         cellProps.hasTimebar = true
       }
     })
+    cellProps.children =  $timebarFragment
+
     fragment.appendChild(renderTableCell(cellProps, ctx))
   })
   return fragment
