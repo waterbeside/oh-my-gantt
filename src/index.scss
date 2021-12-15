@@ -76,10 +76,12 @@ $primaryColor: #0086d4;
       }
     }
   }
-
+  &__row {
+    height: 48px;
+  }
   &__cell {
     width: 100px;
-    height: 48px;
+    height: 100%;
     box-sizing: border-box;
     border: 1px solid $borderColor;
     text-overflow: ellipsis;
