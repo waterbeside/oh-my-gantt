@@ -24,6 +24,12 @@ export function renderTimebar(props: RenderTimebarProps, ctx: OhMyGantt): HTMLEl
   } else  {
     barElm.style.bottom = `${options.timebarGap[0]}px`
   }
+  if (props.timebarItemData.__config) {
+    const timebarConfig = props.timebarItemData.__config
+    if (timebarConfig.top) {
+      barElm.style.top = `${timebarConfig.top}px`
+    }
+  }
 
   if (options.onMouseleaveTimebar){
     barElm.addEventListener('mouseleave', (e: MouseEvent) => {ctx._handleActionTimebar(e, 'mouseleave')})
