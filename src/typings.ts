@@ -152,6 +152,16 @@ interface RenderTableProps {
   options: MyGanttOptions
 }
 
+interface SetScrollTopParamsById {
+  id: string | number
+  index?: number
+}
+
+interface SetScrollTopParamsByIndex {
+  id?: string | number
+  index: number
+}
+
 declare class OhMyGantt {
   element: Element
   data: any[]
@@ -181,10 +191,12 @@ declare class OhMyGantt {
   _getTimebarData($target: HTMLElement): TimebarData
   getRowDataByIndex(index: number): any
   getRowDataById(index: number | string): any
-  createElement(tag: string, props: any, ...children: any[]): HTMLElement
   setMarkLine(markLine: MarkLine): void
   removeMarkLine(markLine: MarkLine): void
   scrollToTime(time: Date | string): void
+  setScrollTop(top: number): void
+  scrollToRow(params: SetScrollTopParamsById | SetScrollTopParamsByIndex): void
+  createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }
 
 

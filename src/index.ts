@@ -290,6 +290,10 @@ export class OhMyGantt {
     return rowData
   }
 
+  /**
+   * 添加MarkLine
+   * @param markLine MarkLine对象
+   */
   setMarkLine(markLine: MarkLine) {
     const $markLine = markLine.$element
     const mkOptions = markLine.options
@@ -304,17 +308,56 @@ export class OhMyGantt {
     }
   }
 
+  /**
+   * 移除markline
+   * @param markLine MarkLine对象
+   */
   removeMarkLine(markLine: MarkLine) {
-    const mkOptions = markLine.options
     const $markLine = markLine.$element
     $markLine.remove()
   }
 
+  /**
+   * 滚到某个时间
+   * @param time 
+   */
   scrollToTime(time: Date | string) {
     const left = computeTimeLeft(time, this, false)
     const $timeGrid = this.$elements.timeGrid
     if (left !== false && $timeGrid) {
       $timeGrid.scrollLeft = left
+    }
+  }
+
+  /**
+   * 设置滚动高度
+   * @param top 
+   */
+  setScrollTop(top: number): void {
+    if (this.$elements.dataGrid && this.$elements.timeGrid) {
+      const leftBdScroll = this.$elements.dataGrid.querySelector<HTMLElement>('.omg-grid__body-wrapper')
+      const rightBdScroll = this.$elements.timeGrid.querySelector<HTMLElement>('.omg-grid__body-wrapper')
+      if (leftBdScroll && rightBdScroll) {
+        leftBdScroll.scrollTop = top
+        rightBdScroll.scrollTop = top
+      }
+    }
+  }
+
+  /**
+   * 滚到指定行
+   * @param options 
+   */
+  scrollToRow(options: SetScrollTopParamsById | SetScrollTopParamsByIndex): void {
+    const { id, index } = options
+    let $row: HTMLElement | null = null
+    if (id !== undefined) {
+      $row = this.element.querySelector<HTMLElement>(`tr[data-row-id="${id}"]`)
+    } else if (index !== undefined) {
+      $row = this.element.querySelector<HTMLElement>(`tr[data-row-index="${index}"]`)
+    }
+    if ($row) {
+      this.setScrollTop($row.offsetTop)
     }
   }
 
