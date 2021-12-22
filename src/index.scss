@@ -1,9 +1,5 @@
 
 
-
-// overflow-x: hidden;
-
-$borderColor: #e0e0e0;
 $primaryColor: #0086d4;
 
 
@@ -29,7 +25,9 @@ $primaryColor: #0086d4;
 
 @mixin tableBase {
   width: 100%;
-  border-collapse: collapse;
+  // border-collapse: collapse;
+  border-collapse: separate;
+  
   border-spacing: 0;
   border: none;
   overflow: hidden;
@@ -41,6 +39,9 @@ $primaryColor: #0086d4;
   height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  --border-color: #e0e0e0;
+  --row-height: 40px;
+  border-bottom: 1px solid var(--border-color);
 
   * {
     box-sizing: border-box;
@@ -67,6 +68,10 @@ $primaryColor: #0086d4;
     .omg-grid__row:last-child {
       border-bottom: none;
     }
+    .omg-grid__row {
+      --row-height: 80px;
+
+    }
     .omg-grid__cell {
       position: relative;
       text-align: center;
@@ -77,17 +82,19 @@ $primaryColor: #0086d4;
     }
   }
   &__row {
-    height: 48px;
+    --row-height: 48px
   }
   &__cell {
     width: 100px;
-    height: 100%;
+    height: var(--row-height);
     box-sizing: border-box;
-    border: 1px solid $borderColor;
+    border-bottom: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
     text-overflow: ellipsis;
     text-align: left;
     &:last-child {
-      border-right: none;
+      // border-right: none;
+      border-right: 1px solid var(--border-color);
     }
     & > .cell {
       position: relative;
@@ -127,7 +134,7 @@ $primaryColor: #0086d4;
 }
 
 .omg-grid-timegrid {
-  border-left: 2px solid $borderColor;
+  border-left: 2px solid var(--border-color);
   flex:1;
   height: 100%;
   .omg-grid__cell {
@@ -159,14 +166,14 @@ $primaryColor: #0086d4;
   z-index: 1000;
   background: #fff;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid $borderColor;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   &__arrow {
     box-sizing: border-box;
     width: 20px;
     height: 20px;
     background: #fff;
-    border: 1px solid $borderColor;
+    border: 1px solid var(--border-color);
     position: absolute;
     left: 50%;
     transform: translateX(-50%) rotate(-45deg);
