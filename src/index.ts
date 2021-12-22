@@ -54,8 +54,6 @@ export class OhMyGantt {
       }
     })
 
-    // console.log('this.data', this.data)
-
     this.startTime = toDate(opt.startTime)
     this.endTime = toDate(opt.endTime)
 
