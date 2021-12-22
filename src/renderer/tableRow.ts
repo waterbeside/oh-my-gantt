@@ -35,7 +35,7 @@ export function renderTableRow(props: RenderTableRowProps, ctx: OhMyGantt): HTML
       if (props.rowData.__config) {
         const rowConfig = props.rowData.__config
         if (rowConfig.height) {
-          tableRowElm.style.height = `${rowConfig.height}px`
+          tableRowElm.style.setProperty('--row-height', `${rowConfig.height}px`)
         }
       }
       tableRowElm.dataset.rowId = props.rowData.id.toString()
@@ -78,7 +78,12 @@ export function renderBodyRow(props: RenderTableRowProps, ctx: OhMyGantt): Docum
   const fragment = document.createDocumentFragment()
   const rowData = props.rowData
   props.columns.forEach((column: ColumnItem, index: number) => {
-    const cellProps: any = { columnName: column.name, columnIndex: index, rowData }
+    const cellProps: any = {
+      columnName: column.name,
+      columnIndex: index, 
+      rowData,
+      isTimeGrid: false
+    }
     cellProps.text = rowData[column.name]
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
@@ -101,13 +106,19 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
   const rowData = props.rowData
 
 
-  let timeIntervalFormatter = 'YYYY-MM-DD HH:mm:ss'
+  let timeIntervalFormatter = 'YYYY/MM/DD HH:mm:ss'
   if (typeof options.timeInterval === 'string') {
     timeIntervalFormatter = getTimeIntervarFormatter(ctx.options.timeInterval, true)
   }
   const timebarSettings = rowData.timebar || []
   props.columns.forEach((column: any, index: number) => {
-    const cellProps: any = { columnName: column.name, columnIndex: index, hasTimebar: false, rowData}
+    const cellProps: any = { 
+      columnName: column.name,
+      columnIndex: index,
+      hasTimebar: false,
+      rowData,
+      isTimeGrid: true
+    }
     if (typeof props.rowIndex !== 'undefined') {
       cellProps.rowIndex = props.rowIndex
     }

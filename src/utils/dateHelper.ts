@@ -21,7 +21,7 @@ export function dateFormat(date: Date | string, format?: string) {
       }
     }
   }
-  format = format || 'YYYY-MM-DD HH:mm:ss'
+  format = format || 'YYYY/MM/DD HH:mm:ss'
   const reg = new RegExp('Y+|M+|D+|H+|m+|s+','g')
   const regY = new RegExp('Y')
   format = format.replace(reg,function(v){
@@ -58,7 +58,7 @@ export function getTimeList(
   if (typeof timeInterval === 'string' && ['day', 'hour', 'week'].includes(timeInterval)) {
     interval = getTimeListInterval(timeInterval as 'day' | 'hour' | 'week')
   } else if (timeInterval === 'month') {
-    return getTimeListBase(start, end, 'YYYY-MM', (date) => {
+    return getTimeListBase(start, end, 'YYYY/MM', (date) => {
       return new Date(date.getFullYear(), date.getMonth() + 1, 1)
     })
   } else if (timeInterval === 'year') {
@@ -108,13 +108,13 @@ export function getTimeListBase(
 
 export function getTimeIntervarFormatter(timeInterval: TimeInterval, fill = false): string {
   if (timeInterval === 'year') {
-    return fill ? 'YYYY-01-01 00:00:00' : 'YYYY'
+    return fill ? 'YYYY/01/01 00:00:00' : 'YYYY'
   } else if (timeInterval === 'month') {
-    return fill ? 'YYYY-MM-01 00:00:00' : 'YYYY-MM'
+    return fill ? 'YYYY/MM/01 00:00:00' : 'YYYY/MM'
   } else if (timeInterval === 'hour') {
-    return fill ? 'YYYY-MM-DD HH:00:00' : 'YYYY-MM-DD HH'
+    return fill ? 'YYYY/MM/DD HH:00:00' : 'YYYY/MM/DD HH'
   }
-  return fill ? 'YYYY-MM-DD 00:00:00' : 'YYYY-MM-DD'
+  return fill ? 'YYYY/MM/DD 00:00:00' : 'YYYY/MM/DD'
 }
 
 
