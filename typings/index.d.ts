@@ -4,6 +4,9 @@ declare module 'oh-my-gantt' {
   type HandleDragAction = 'dragend' | 'drag' | 'dragenter' | 'dragover' | 'dropleave'| 'drop'
   type RendererReturnType = DocumentFragment | HTMLElement | string | null
 
+  type CssStyle = {
+    [key in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[key]
+  }
 
   interface MyGanttElements {
     dataGrid: HTMLElement | null
@@ -51,11 +54,19 @@ declare module 'oh-my-gantt' {
     to: Date | string
     desc?: string
     color?: string
+    __config?: {
+      style?: CssStyle
+      [key: string]: any
+    }
     [key: string]: any
   }
 
   interface MyGanttDataItme {
     timebar: TimebarSetting[]
+    __config?: {
+      height?: number
+      [key: string]: any
+    }
     [key: string]: any
   }
 
@@ -87,6 +98,7 @@ declare module 'oh-my-gantt' {
     onRendered?: (ctx: OhMyGantt) => any
     timebarRenderer?: (data: TimebarData, ctx: OhMyGantt) => RendererReturnType
     timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
+    timeGridCellRenderer?: (data: CellData, $timebarsElement:DocumentFragment, ctx: OhMyGantt) => RendererReturnType
     [key: string]: any
   }
 
@@ -121,6 +133,7 @@ declare module 'oh-my-gantt' {
     rowIndex?: number | string
     hasTimebar?: boolean
     columnIndex: number
+    isTimeGrid: boolean
   }
 
   // renderer - renderTableRow 参数

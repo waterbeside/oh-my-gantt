@@ -3,6 +3,9 @@ type HandleMouseAction = 'click' | 'mouseover' | 'mouseleave' | 'dragstart'
 type HandleDragAction = 'dragend' | 'drag' | 'dragenter' | 'dragover' | 'dropleave'| 'drop'
 type RendererReturnType = DocumentFragment | HTMLElement | string | null
 
+type CssStyle = {
+  [key in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[key]
+}
 
 interface MyGanttElements {
   dataGrid: HTMLElement | null
@@ -50,11 +53,19 @@ interface TimebarSetting {
   to: Date | string
   desc?: string
   color?: string
+  __config?: {
+    style?: CssStyle
+    [key: string]: any
+  }
   [key: string]: any
 }
 
 interface MyGanttDataItme {
   timebar: TimebarSetting[]
+  __config?: {
+    height?: number
+    [key: string]: any
+  }
   [key: string]: any
 }
 
@@ -86,6 +97,7 @@ interface MyGanttOptions {
   onRendered?: (ctx: OhMyGantt) => any
   timebarRenderer?: (data: TimebarData, ctx: OhMyGantt) => RendererReturnType
   timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
+  timeGridCellRenderer?: (data: CellData, $timebarsElement:DocumentFragment, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
 }
 
@@ -120,6 +132,7 @@ interface RenderTableCellProps {
   rowIndex?: number | string
   hasTimebar?: boolean
   columnIndex: number
+  isTimeGrid: boolean
 }
 
 // renderer - renderTableRow 参数
