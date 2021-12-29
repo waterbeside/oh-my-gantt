@@ -1,4 +1,3 @@
-import path from 'path'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import scss from 'rollup-plugin-scss'
@@ -7,7 +6,7 @@ import autoprefixer from 'autoprefixer'
 import ts from 'rollup-plugin-typescript2'
 import pkg from './package.json'
 
-const getPath = _path => path.resolve(__dirname, _path)
+import { terser } from 'rollup-plugin-terser'
 
 
 const extensions = [
@@ -16,10 +15,10 @@ const extensions = [
   '.tsx'
 ]
 
-// ts
-const tsPlugin = ts({
-  extensions
-})
+// pplugins
+const tsPlugin = ts({extensions})
+
+const terserPlugin = terser({ format: { comments: false } })
 
 export default [
   // UMD for browser-friendly build
@@ -33,15 +32,16 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      tsPlugin
+      tsPlugin,
+      terserPlugin
     ]
-    
   },
-  // CommonJS for Node and ES module for bundlers build
+  // ES module for bundlers build
   {
     input: 'src/index.ts',
     plugins: [
-      tsPlugin
+      tsPlugin,
+      terserPlugin
     ],
     output: [
       {  file: pkg.module, format: 'es' }
