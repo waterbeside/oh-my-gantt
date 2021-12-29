@@ -209,9 +209,9 @@ declare class OhMyGantt {
   scrollToTime(time: Date | string): void
   setScrollTop(top: number): void
   scrollToRow(params: SetScrollTopParamsById | SetScrollTopParamsByIndex): void
+  destroy(): void
   createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }
-
 
 
 interface OhMarkLineOptions {

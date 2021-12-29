@@ -359,5 +359,10 @@ export class OhMyGantt {
     }
   }
 
+  destroy() {
+    this.$elements.dataGrid?.remove()
+    this.$elements.timeGrid?.remove()
+  }
+
   createElement = createElement
 }
