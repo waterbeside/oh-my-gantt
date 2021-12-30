@@ -5,7 +5,6 @@ import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
 import ts from 'rollup-plugin-typescript2'
 import pkg from './package.json'
-
 import { terser } from 'rollup-plugin-terser'
 
 
@@ -25,7 +24,7 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      name: 'howLongUntilLunch',
+      name: 'OMG',
 			file: pkg.browser,
 			format: 'umd'
     },
