@@ -1,5 +1,5 @@
 import { createElement } from '../utils/helper'
-import MarkLine from '../markLine'
+import MarkLine from '../OhMarkLine'
 
 export function renderMarkLine(props: OhMarkLineOptions, ctx: MarkLine) {
   const markLineClassName = 'omg-markline'
