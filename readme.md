@@ -77,5 +77,4 @@ const data = [
         ],
         data
       })
-
 ```

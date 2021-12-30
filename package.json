@@ -1,6 +1,6 @@
 {
   "name": "oh-my-gantt",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
@@ -22,7 +22,6 @@
     "eslint": "^8.4.1",
     "postcss": "^8.4.4",
     "rollup": "^2.60.2",
-    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-dts": "^4.0.1",
     "rollup-plugin-node-resolve": "^5.2.0",
