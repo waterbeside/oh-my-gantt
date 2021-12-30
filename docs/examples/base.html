@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oh-My-Gantt Examples</title>
+  <link rel="stylesheet" href="../../dist/index.css">
+  <style>
+    body {
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+  <script src='../../dist/index.umd.js'></script>
+  <script src="http://mockjs.com/dist/mock.js"></script>
+</head>
+<body>
+  <div id="gantt-box"></div>
+  <script>
+    window.onload = function() {
+      // console.log(OMG)
+      const { OhMyGantt } = OMG
+      const data = [
+          {
+            name: 'Task 1',
+            timebar: [
+              {
+                from: '2021-12-01',
+                to: '2021-12-04',
+                desc: 'Task 1',
+              },
+            ]
+          },
+          {
+            name: 'Task 2',
+            timebar: [
+              {
+                from: '2021-12-02',
+                to: '2021-12-02',
+                desc: 'Task 2',
+              },
+            ]
+          },
+        ]
+      
+      const gantt = new OhMyGantt('#gantt-box', {
+        from: '2021-12-01',
+        to: '2021-12-31',
+        timeInterval: 'day',
+        timeCellWidth: 120,
+        columns: [
+          {
+            name: 'name',
+            label: 'Name',
+            width: 140,
+          }
+        ],
+        data
+      })
+    }
+  </script>
+</body>
+</html>
