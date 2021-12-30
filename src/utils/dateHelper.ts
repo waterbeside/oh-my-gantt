@@ -1,10 +1,27 @@
+export const REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/
 
-export function toDate(date: Date | string) {
-  return typeof date === 'string' ? new Date(date) : date
+/**
+ * 转为日期对象
+ * @param date 日期字符串或日期对象
+ * @returns 返回日期对像
+ */
+export function toDate(date: Date | string): Date {
+  if (date instanceof Date) {
+    return date
+  }
+  if (typeof date === 'string' && !/Z$/i.test(date)) {
+    const d = date.match(REGEX_PARSE) as any
+    if (d) {
+      const m = d[2] - 1 || 0
+      const ms = (d[7] || '0').substring(0, 3)
+      return new Date(d[1], m, d[3]
+          || 1, d[4] || 0, d[5] || 0, d[6] || 0, ms)
+    }
+  }
+  return  new Date(date)
 }
 
-
-export function dateFormat(date: Date | string, format?: string) {
+export function dateFormat(date: Date | string, format?: string): string {
   date = date ? toDate(date) : new Date()
   const map: any = {
     'Y' : date.getFullYear(),
@@ -48,21 +65,21 @@ export function dateFormat(date: Date | string, format?: string) {
  * @param timeInterval 时间间隔
  * @returns 
  */
-export function getTimeList(
+export function createTimeList(
   start: Date | string,
   end: Date | string,
-  timeInterval: 'year' | 'day' | 'hour' | 'week' | 'month'  | number = 'day'
+  timeInterval: TimeInterval = 'day'
 ): Array<Date> {
   const list = []
-  let interval = getTimeListInterval('day')
+  let interval = computeTimeListInterval('day')
   if (typeof timeInterval === 'string' && ['day', 'hour', 'week'].includes(timeInterval)) {
-    interval = getTimeListInterval(timeInterval as 'day' | 'hour' | 'week')
+    interval = computeTimeListInterval(timeInterval as 'day' | 'hour' | 'week')
   } else if (timeInterval === 'month') {
-    return getTimeListBase(start, end, 'YYYY/MM', (date) => {
+    return createTimeListBase(start, end, 'YYYY/MM', (date) => {
       return new Date(date.getFullYear(), date.getMonth() + 1, 1)
     })
   } else if (timeInterval === 'year') {
-    return getTimeListBase(start, end, 'YYYY', (date) => {
+    return createTimeListBase(start, end, 'YYYY', (date) => {
       return new Date(date.getFullYear() + 1, 1, 1)
     })
   }
@@ -86,7 +103,7 @@ export function getTimeList(
  * @param end 
  * @returns 
  */
-export function getTimeListBase(
+export function createTimeListBase(
   start: Date | string,
   end: Date | string,
   initFormatter: string,
@@ -118,7 +135,12 @@ export function getTimeIntervarFormatter(timeInterval: TimeInterval, fill = fals
 }
 
 
-export function getTimeListInterval(flag: 'day' | 'hour' | 'week' | 'month'  | number = 'day') {
+/**
+ * 计算时间列表间隔
+ * @param flag 间隔时间或者时间标识
+ * @returns 
+ */
+export function computeTimeListInterval(flag: 'day' | 'hour' | 'week' | 'month'  | number = 'day'): number {
   if (typeof flag === 'number') {
     return flag
   }
