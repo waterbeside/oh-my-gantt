@@ -1,5 +1,5 @@
-import { toDate, getTimeIntervarFormatter, dateFormat, getTimeListInterval } from './dateHelper'
-import MarkLine from '../markLine'
+import { toDate, getTimeIntervarFormatter, dateFormat, computeTimeListInterval } from './dateHelper'
+import MarkLine from '../OhMarkLine'
 
 /**
  * 防抖
@@ -126,54 +126,11 @@ export function computeTimeColumnLabel(date: Date, ctx: OhMyGantt): string {
   if (typeof timeInterval === 'string' && ['hour', 'day', 'month', 'year'].includes(timeInterval)) {
     return dateFormat(date, getTimeIntervarFormatter(timeInterval))
   } else if (timeInterval === 'week') {
-    const end = date.getTime() + getTimeListInterval('week')
+    const end = date.getTime() + computeTimeListInterval('week')
     return `${dateFormat(date, 'YYYY-MM-DD')}~${dateFormat(String(end), 'YYYY-MM-DD')}`
   }
   return dateFormat(date, 'YYYY-MM-DD HH:mm:ss')
 
-}
-
-/**
- * 创建元素
- * @param tag 标签名
- * @param props 属性
- * @param children 子完素
- * @returns 
- */
-export function createElement(tag: string, props: any, ...children: any[]): HTMLElement {
-  const element = document.createElement(tag)
-  Object.keys(props).forEach(key => {
-    element.setAttribute(key, props[key])
-  })
-
-  if (Array.isArray(children)) {
-    children.forEach(child => {
-      if (typeof child === 'string') {
-        child = document.createTextNode(child)
-      }
-      element.appendChild(child)
-    })
-  }
-  return element
-}
-
-export function createIdent(row: any) {
-  const jsonstr = JSON.stringify(row)
-  const hc = ('0000000000' + Math.abs(hashCode(jsonstr))).slice(-9)
-  const now = (Date.now() + Number(Math.random().toString().slice(-6))).toString().slice(-9)
-  return `${hc}-${now}`
-}
-
-
-export function hashCode(str: string): number {
-  let hash = 0, i, chr
-  if (str.length === 0) return hash
-  for (i = 0; i < str.length; i++) {
-    chr   = str.charCodeAt(i)
-    hash  = ((hash << 5) - hash) + chr
-    hash |= 0 // Convert to 32bit integer
-  }
-  return hash
 }
 
 
@@ -232,4 +189,55 @@ export function computeMarkLineLeft(markLine: MarkLine, ctx: OhMyGantt): number 
   }
   
   return false
+}
+
+
+/**
+ * 随机生成id
+ * @param row any data
+ * @returns 
+ */
+export function createIdent(row: any = null) {
+  row = row || {}
+  const jsonstr = JSON.stringify(row)
+  const hc = ('0000000000' + Math.abs(hashCode(jsonstr))).slice(-9)
+  const now = (Date.now() + Number(Math.random().toString().slice(-6))).toString().slice(-9)
+  return `${hc}-${now}`
+}
+
+
+export function hashCode(str: string): number {
+  let hash = 0, i, chr
+  if (str.length === 0) return hash
+  for (i = 0; i < str.length; i++) {
+    chr   = str.charCodeAt(i)
+    hash  = ((hash << 5) - hash) + chr
+    hash |= 0 // Convert to 32bit integer
+  }
+  return hash
+}
+
+
+/**
+ * 创建元素
+ * @param tag 标签名
+ * @param props 属性
+ * @param children 子完素
+ * @returns HTMLElement
+ */
+export function createElement(tag: string, props: any, ...children: any[]): HTMLElement {
+  const element = document.createElement(tag)
+  Object.keys(props).forEach(key => {
+    element.setAttribute(key, props[key])
+  })
+
+  if (Array.isArray(children)) {
+    children.forEach(child => {
+      if (typeof child === 'string') {
+        child = document.createTextNode(child)
+      }
+      element.appendChild(child)
+    })
+  }
+  return element
 }
