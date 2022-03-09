@@ -179,7 +179,7 @@ interface SetScrollTopParamsByIndex {
   index: number
 }
 
-declare class OhMyGantt {
+export declare class OhMyGantt {
   element: Element
   data: any[]
   columns: ColumnItem[]
@@ -217,7 +217,6 @@ declare class OhMyGantt {
   createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }
 
-
 interface OhMarkLineOptions {
   grid?: 'time' | 'data'
   derection?: 'horizontal' | 'vertical'
@@ -232,7 +231,8 @@ interface OhMarkLineOptionsExtendDefault extends OhMarkLineOptions {
   grid: 'time' | 'data'
   derection: 'horizontal' | 'vertical'
 }
-declare class MarkLine {
+
+export declare class MarkLine {
   options: OhMarkLineOptionsExtendDefault
   id: string
   $element: HTMLElement
@@ -247,8 +247,5 @@ interface IUtils {
   createTimeList: (start: Date | string, end: Date | string, timeInterval: TimeInterval) => Array<Date>
 }
 
-declare module 'oh-my-gantt' {
-  export class OhMyGantt extends OhMyGantt {}
-  export class MarkLine extends MarkLine {}
-  export const utils: IUtils
-}
+export declare const utils: IUtils
+
