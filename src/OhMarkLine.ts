@@ -9,7 +9,7 @@ import {
 } from '../typings/types'
 
 
-export default class OhMarkLine {
+export default class MarkLine {
   options: OhMarkLineOptionsExtendDefault
   id: string
   color?: string
