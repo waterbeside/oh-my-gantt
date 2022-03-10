@@ -6,6 +6,7 @@ import autoprefixer from 'autoprefixer'
 import ts from 'rollup-plugin-typescript2'
 import pkg from './package.json'
 import { terser } from 'rollup-plugin-terser'
+import clear from 'rollup-plugin-clear'
 
 
 const extensions = [
@@ -29,6 +30,7 @@ export default [
 			format: 'umd'
     },
     plugins: [
+      clear({ targets: ['dist'] }),
       resolve(),
       commonjs(),
       tsPlugin,
