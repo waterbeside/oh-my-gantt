@@ -1,3 +1,5 @@
+import { TimeInterval } from '../../typings/types'
+
 export const REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/
 
 /**

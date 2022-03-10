@@ -2,6 +2,11 @@ import { renderTableCell } from './tableCell'
 import { renderTimebar } from './timebar'
 import { computeTimebar } from '../utils/helper'
 import { toDate, getTimeIntervarFormatter, dateFormat } from '../utils/dateHelper'
+import {
+  RenderTableRowProps,
+  OhMyGantt,
+  ColumnItem
+} from '../../typings/types'
 
 /**
  * 生成表行

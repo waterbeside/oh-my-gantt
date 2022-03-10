@@ -9,6 +9,7 @@ import {
   createTimeList
 } from './dateHelper'
 
+import { IUtils } from '../../typings/types'
 
 
 const utils: IUtils = {

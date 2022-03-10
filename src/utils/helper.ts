@@ -1,5 +1,11 @@
 import { toDate, getTimeIntervarFormatter, dateFormat, computeTimeListInterval } from './dateHelper'
 import MarkLine from '../OhMarkLine'
+import {
+  ColumnItem,
+  ComputeTimebarProps,
+  OhMyGantt,
+  ComputeTimebarReturn
+} from '../../typings/types'
 
 /**
  * 防抖

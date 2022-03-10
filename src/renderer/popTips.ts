@@ -1,4 +1,5 @@
 import { createElement } from '../utils/helper'
+import { OhMyGantt } from '../../typings/types'
 export function renderPopTips(props: any, ctx: OhMyGantt) {
   const $arrow = createElement('div', {class: 'omg-pop-tips__arrow'})
   const $content = createElement('div', {class: 'omg-pop-tips__content'}, props.children)

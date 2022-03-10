@@ -11,6 +11,20 @@ import { toDate, createTimeList } from './utils/dateHelper'
 import { renderTable } from './renderer/index'
 import MarkLine from './OhMarkLine'
 
+import { 
+  MyGanttDataItme,
+  ColumnItem,
+  MyGanttOptionsMerge,
+  MyGanttElements,
+  MyGanttOptions,
+  GridScrollData,
+  HandleMouseAction,
+  HandleDragAction,
+  TimebarData,
+  CellData,
+  SetScrollTopParamsById,
+  SetScrollTopParamsByIndex
+} from '../typings/types'
 
 export default class OhMyGantt {
   element: Element

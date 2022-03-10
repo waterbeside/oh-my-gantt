@@ -3,6 +3,11 @@
 import { renderMarkLine } from './renderer/markLine'
 import { createIdent } from './utils/helper'
 
+import {
+  OhMarkLineOptionsExtendDefault,
+  OhMarkLineOptions
+} from '../typings/types'
+
 
 export default class OhMarkLine {
   options: OhMarkLineOptionsExtendDefault

@@ -1,3 +1,5 @@
+import { OhMyGantt, ColumnItem } from '../../typings/types'
+
 /**
  * render Colgroup
  * @param props 

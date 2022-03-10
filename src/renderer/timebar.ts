@@ -1,3 +1,9 @@
+import {
+  RenderTimebarProps,
+  OhMyGantt,
+  TimebarData
+} from '../../typings/types'
+
 /**
  * 画出时间线
  */

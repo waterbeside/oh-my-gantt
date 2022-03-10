@@ -1,3 +1,10 @@
+import {
+  RenderTableCellProps,
+  OhMyGantt,
+  CellData
+} from '../../typings/types'
+
+
 /**
  * 生成表的单元格
  * @param props 
