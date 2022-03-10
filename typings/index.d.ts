@@ -1,5 +1,5 @@
 
-import  { OhMyGantt, MarkLine, IUtils  } from './types'
+import  { OhMyGantt, MarkLine, IUtils  } from './types.d'
 
 declare const utils: IUtils
 
