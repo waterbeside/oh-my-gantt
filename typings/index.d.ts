@@ -217,7 +217,6 @@ declare class OhMyGantt {
   createElement(tag: string, props: any, ...children: any[]): HTMLElement
 }
 
-
 interface OhMarkLineOptions {
   grid?: 'time' | 'data'
   derection?: 'horizontal' | 'vertical'
@@ -232,6 +231,7 @@ interface OhMarkLineOptionsExtendDefault extends OhMarkLineOptions {
   grid: 'time' | 'data'
   derection: 'horizontal' | 'vertical'
 }
+
 declare class MarkLine {
   options: OhMarkLineOptionsExtendDefault
   id: string
@@ -247,8 +247,19 @@ interface IUtils {
   createTimeList: (start: Date | string, end: Date | string, timeInterval: TimeInterval) => Array<Date>
 }
 
+
+declare const utils: IUtils
+
+
 declare module 'oh-my-gantt' {
-  export class OhMyGantt extends OhMyGantt {}
-  export class MarkLine extends MarkLine {}
-  export const utils: IUtils
+  export {
+    OhMyGantt,
+    MarkLine,
+    utils,
+    TimebarSetting,
+    OhMarkLineOptions,
+    MyGanttOptions,
+    MyGanttDataItme
+  } 
 }
+
