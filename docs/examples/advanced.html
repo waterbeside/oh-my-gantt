@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oh-My-Gantt MarkLine examples</title>
+  <link rel="stylesheet" href="../../dist/index.css">
+  <link rel="stylesheet" href="./assets/examples.css">
+  <style>
+    #gantt-box {
+      width: 100%;
+      height: 600px;
+      --row-height: 50px;
+    }
+  </style>
+
+  <script src='../../dist/index.umd.js'></script>
+  <script src="http://mockjs.com/dist/mock.js"></script>
+  <script src="./createData.js"></script>
+  
+</head>
+<body>
+  <h1>OhMyGantt advanced usage</h1>
+  <article>
+  </article>
+  <div id="gantt-box"></div>
+  <script>
+    ;(function() {
+      const weekList = ['日', '一', '二', '三', '四', '五', '六']
+
+      const { OhMyGantt, MarkLine, utils } = OMG
+      const today = new Date(new Date(new Date().toLocaleDateString()).getTime())
+      // MarkLine for today
+      const todayMarkLine = new MarkLine({
+        grid: 'time',
+        derection: 'vertical',
+        label: 'Today',
+        time: today,
+        color: 'rgba(255, 0, 0, 0.9)',
+      })
+  
+      const data = createExamplesData()
+      console.log('data', data)
+      const from =new Date(new Date(new Date().toLocaleDateString()).getTime() - 24 * 60 * 60 * 1000)
+      const to = new Date(from.getTime() + 1000 * 60 * 60 * 24 * 30)
+     
+      const gantt = new OhMyGantt('#gantt-box', {
+        startTime: from,
+        endTime: to,
+        columns: [
+          {
+            name: 'name',
+            label: 'Task name',
+            width: 120,
+          },{
+            name: 'status',
+            label: 'Status',
+            width: 120,
+          }
+        ],
+        data,
+        timeCellWidth: 120,
+        dataGridWidth: 500,
+        timebarHeight: 36,
+        timeInterval: 'day',
+        timebarGap: [8, 4],
+        timebarDraggable: false,
+
+        // timeGridCellRenderer: TimeCellInner, 
+        onScroll: (data, e) => {
+         
+        },
+        onCreated: function(ctx) {
+         
+        },
+        onClickCell: function(data,  e) {
+       
+          // console.log(data)
+        },
+        onClickTimebar: function(data,  e) {
+          console.log('onClickTimebar', data)
+          // return true
+        },
+        onMouseoverTimebar: function(data,  e) {
+          console.log('onMouseoverTimebar', data, e)
+        }, 
+        onMouseleaveTimebar: function(data,  e) {
+          console.log('onMouseleaveTimebar', data, e)
+        },
+        onDragTimebar: function(data,  e) {
+          console.log('onDragTimebar', data, e)
+        },
+        timeLabelRenderer: function(column, index, ctx) {
+          const $elm = document.createElement('div')
+          $elm.className = 'timegrid-label-content'
+          const date = column.sourceData
+          const week = date.getDay()
+          $elm.classList.add(`week-${week}`)
+     
+          $elm.innerHTML = `
+            <div class="date-box">${utils.dateFormat(utils.toDate(date), 'YYYY-MM-DD')}</div>
+            <div class="week-box">周${weekList[week]}</div>
+          `
+          // console.log('timeHeaderRenderer', data)
+          return $elm
+        },
+        onCreated: function(ctx) {
+          ctx.setMarkLine(todayMarkLine)
+        },
+      })
+
+    })()
+  </script>
+</body>
+</html>

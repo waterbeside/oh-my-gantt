@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oh-My-Gantt Examples</title>
+  <title>Oh-My-Gantt base examples</title>
   <link rel="stylesheet" href="../../dist/index.css">
   <style>
     body {
@@ -27,7 +27,7 @@
             timebar: [
               {
                 from: '2021-12-01',
-                to: '2021-12-04',
+                to: '2021-12-03',
                 desc: 'Task 1',
               },
             ]
@@ -36,9 +36,10 @@
             name: 'Task 2',
             timebar: [
               {
-                from: '2021-12-02',
-                to: '2021-12-02',
+                from: '2021-12-04',
+                to: '2021-12-05',
                 desc: 'Task 2',
+                __config: { style: { backgroundColor: 'rgb(36, 112, 122)' } }
               },
             ]
           },
@@ -52,7 +53,7 @@
         columns: [
           {
             name: 'name',
-            label: 'Name',
+            label: 'Task Name',
             width: 140,
           }
         ],

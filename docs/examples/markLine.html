@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oh-My-Gantt MarkLine examples</title>
+  <link rel="stylesheet" href="../../dist/index.css">
+  <link rel="stylesheet" href="./assets/examples.css">
+  <style>
+    body {
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+  <script src='../../dist/index.umd.js'></script>
+  <script src="http://mockjs.com/dist/mock.js"></script>
+</head>
+<body>
+  <h1>MarkLine examples</h1>
+  <article>
+    <p>This example shows how to add a MarkLine. For example add a line showing "today"</p>
+  </article>
+  <div id="gantt-box"></div>
+  <script>
+    ;(function() {
+      const { OhMyGantt, MarkLine } = OMG
+      const today = new Date(new Date(new Date().toLocaleDateString()).getTime())
+      // MarkLine for today
+      const todayMarkLine = new MarkLine({
+        grid: 'time',
+        derection: 'vertical',
+        label: 'Today',
+        time: today,
+        color: 'rgba(255, 0, 0, 0.9)',
+      })
+      // Add another MarkLine for tomorrow
+      const tomorrowMarkLine = new MarkLine({
+        grid: 'time',
+        derection: 'vertical',
+        label: 'Tomorrow',
+        time: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+        color: 'rgb(36, 122, 89)',
+        fontColor: '#000'
+      })
+      
+      const data = [
+          {
+            name: 'Task 1',
+            timebar: [
+              {
+                from: '2021-12-01',
+                to: '2021-12-04',
+                desc: 'Task 1',
+              },
+            ]
+          },
+          {
+            name: 'Task 2',
+            timebar: [
+              {
+                from: '2021-12-02',
+                to: '2021-12-02',
+                desc: 'Task 2',
+              },
+            ]
+          },
+        ]
+      
+      const from =  new Date(new Date(new Date().toLocaleDateString()).getTime() - 24 * 60 * 60 * 1000)
+      const to = new Date(from.getTime() + 10 * 24 * 60 * 60 * 1000)
+      const gantt = new OhMyGantt('#gantt-box', {
+        from,
+        to,
+        timeInterval: 'day',
+        timeCellWidth: 120,
+        columns: [
+          {
+            name: 'name',
+            label: 'Task name',
+            width: 140,
+          }
+        ],
+        data,
+        onCreated: function(ctx) {
+          ctx.setMarkLine(todayMarkLine)
+          ctx.setMarkLine(tomorrowMarkLine)
+        },
+      })
+
+    })()
+  </script>
+</body>
+</html>

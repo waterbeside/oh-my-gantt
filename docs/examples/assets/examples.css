@@ -1,0 +1,41 @@
+
+
+body {
+  font-size: 14px;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+
+article {
+  padding: 1em;
+}
+
+.timegrid-label-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-box, .week-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.date-box {
+  flex: 1;
+}
+.week-box {
+  border-top: 1px solid #ccc;
+  height: 24px;
+  font-size: 12px;
+}
+.timegrid-label-content.week-0  .week-box {
+  color: rgb(205, 94, 94);
+}
