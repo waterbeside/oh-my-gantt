@@ -12,7 +12,7 @@ import { renderTable } from './renderer/index'
 import MarkLine from './OhMarkLine'
 
 import { 
-  MyGanttDataItme,
+  MyGanttDataItem,
   ColumnItem,
   MyGanttOptionsMerge,
   MyGanttElements,
@@ -28,7 +28,7 @@ import {
 
 export default class OhMyGantt {
   element: Element
-  data: MyGanttDataItme[] = [] // 数据
+  data: MyGanttDataItem[] = [] // 数据
   columns: ColumnItem[] = [] // 要显示的列
   timeColumns: ColumnItem[] = [] // 时间列
   timeList: Array<Date> = [] // 时间列表
@@ -119,12 +119,12 @@ export default class OhMyGantt {
    * 渲染右侧表格
    */
   renderTimeGrid(): [HTMLElement, number] {
-    const timeColumns: any[] = []
+    const timeColumns: ColumnItem[] = []
     for (const date of this.timeList) {
       timeColumns.push({
         label: computeTimeColumnLabel(date, this),
         width: this.options.timeCellWidth,
-        name: date.getTime(),
+        name: String(date.getTime()),
         sourceData: date
       })
     }
@@ -293,18 +293,18 @@ export default class OhMyGantt {
     return timebarData
   }
 
-  getRowDataByIndex(index: number) {
+  getRowDataByIndex(index: number):MyGanttDataItem | null {
     if (Number.isNaN(index)) {
       return null
     }
     return this.data[index]
   }
 
-  getRowDataById(id: string | number) {
+  getRowDataById(id: string | number):MyGanttDataItem | null {
     if (!id) {
       return null
     }
-    const rowData = this.data.find(row => row.id === id)
+    const rowData = this.data.find(row => row.id === id) || null
     return rowData
   }
 

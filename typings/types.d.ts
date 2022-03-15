@@ -17,7 +17,7 @@ export interface ColumnItem {
   label: string
   width?: number
   sourceData?: any
-  render?: (item: any) => HTMLElement
+  // render?: (item: any) => HTMLElement
 }
 
 export interface CellData {
@@ -53,7 +53,6 @@ export interface TimebarSetting {
   from: Date | string
   to: Date | string
   desc?: string
-  color?: string
   __config?: {
     style?: CssStyle
     [key: string]: any
@@ -61,7 +60,7 @@ export interface TimebarSetting {
   [key: string]: any
 }
 
-export interface MyGanttDataItme {
+export interface MyGanttDataItem {
   timebar: TimebarSetting[]
   __config?: {
     height?: number
@@ -82,25 +81,25 @@ export interface MyGanttOptions {
   timeInterval?: TimeInterval
   timebarGap?: [number, number]
   timebarHeight?: number | null
-  timeaBarDraggable?: boolean
-  data: MyGanttDataItme[]
-  onClickCell?: (data: CellData, e: MouseEvent) => any
+  timebarDraggable?: boolean
+  data: MyGanttDataItem[]
+  timebarRenderer?: (data: TimebarData, ctx: OhMyGantt) => RendererReturnType
+  timeGridCellRenderer?: (data: CellData, $timebarsElement:DocumentFragment, ctx: OhMyGantt) => RendererReturnType
+  timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
   onClickTimebar?: (data: TimebarData, e: MouseEvent) => any
   onMouseoverTimebar?: (data: TimebarData, e: MouseEvent) => any
   onMouseleaveTimebar?: (data: TimebarData, e: MouseEvent) => any
-  onDropCell?: (data: CellData, e: MouseEvent) => any
-  onDragoverCell?: (data: CellData, e: MouseEvent) => any
-  onDragleaveCell?: (data: CellData, e: MouseEvent) => any
-  onDragenterCell?: (data: CellData, e: MouseEvent) => any
+  onDragTimebar?: (data: TimebarData, e: MouseEvent) => any
   onDragstartTimebar?: (data: TimebarData, e: MouseEvent) => any
   onDragendTimebar?: (data: TimebarData, e: MouseEvent) => any
-  onDragTimebar?: (data: TimebarData, e: MouseEvent) => any
+  onClickCell?: (data: CellData, e: MouseEvent) => any
+  onDropCell?: (data: CellData, e: MouseEvent) => any
+  onDragoverCell?: (data: CellData, e: MouseEvent) => any
+  onDragenterCell?: (data: CellData, e: MouseEvent) => any
+  onDragleaveCell?: (data: CellData, e: MouseEvent) => any
   onScroll?: (data: GridScrollData, e: Event) => any
   onCreated?: (ctx: OhMyGantt) => any
   onRendered?: (ctx: OhMyGantt) => any
-  timebarRenderer?: (data: TimebarData, ctx: OhMyGantt) => RendererReturnType
-  timeLabelRenderer?: (data: ColumnItem, columnIndex: number, ctx: OhMyGantt) => RendererReturnType
-  timeGridCellRenderer?: (data: CellData, $timebarsElement:DocumentFragment, ctx: OhMyGantt) => RendererReturnType
   [key: string]: any
 }
 
@@ -182,7 +181,7 @@ export interface SetScrollTopParamsByIndex {
 
 export declare class OhMyGantt {
   element: Element
-  data: any[]
+  data: MyGanttDataItem[]
   columns: ColumnItem[]
   timeColumns: ColumnItem[]
   timeList: Array<Date>
@@ -207,8 +206,8 @@ export declare class OhMyGantt {
   _handleActionTimebar(e: MouseEvent, action: HandleMouseAction | HandleDragAction): void
   _getCellData($target: HTMLElement, isHeader: boolean, isTimeGrid: boolean ): CellData
   _getTimebarData($target: HTMLElement): TimebarData
-  getRowDataByIndex(index: number): any
-  getRowDataById(index: number | string): any
+  getRowDataByIndex(index: number): MyGanttDataItem | null
+  getRowDataById(index: number | string): MyGanttDataItem | null
   setMarkLine(markLine: MarkLine): void
   removeMarkLine(markLine: MarkLine): void
   scrollToTime(time: Date | string): void
@@ -221,7 +220,7 @@ export declare class OhMyGantt {
 export interface OhMarkLineOptions {
   grid?: 'time' | 'data'
   derection?: 'horizontal' | 'vertical'
-  time?: Date
+  time?: Date | string
   label: string
   color?: string
   lineStyle?: 'solid' | 'dashed' | 'dotted'
