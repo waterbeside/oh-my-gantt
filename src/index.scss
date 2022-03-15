@@ -6,6 +6,7 @@ $primaryColor: #0086d4;
   flex-direction: row;
   overflow: hidden;
   --border-color: #e0e0e0;
+  --row-height: 40px;
   border: 1px solid var(--border-color)
 }
 
@@ -45,7 +46,6 @@ $primaryColor: #0086d4;
   height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  --row-height: 40px;
 
   * {
     box-sizing: border-box;
