@@ -34,8 +34,8 @@ import { OhMyGantt } from 'oh-my-gantt'
 Direct \<script\> Include
 
 ```html
-<link rel="stylesheet"  href="https://unpkg.com/oh-my-gantt@1.2.0/dist/index.css" />
-<script src="https://unpkg.com/oh-my-gantt@1.2.0/dist/index.umd.js"></script>
+<link rel="stylesheet"  href="https://unpkg.com/oh-my-gantt@1.2.5/dist/index.css" />
+<script src="https://unpkg.com/oh-my-gantt@1.2.5/dist/index.umd.js"></script>
 <script>
   var OhMyGantt = OMG.OhMyGantt
 <script>

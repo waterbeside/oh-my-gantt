@@ -38,8 +38,8 @@ import { OhMyGantt } from 'oh-my-gantt'
 ### 直接使用 \<script\>
 
 ```html
-<link rel="stylesheet"  href="https://unpkg.com/oh-my-gantt@1.2.0/dist/index.css" />
-<script src="https://unpkg.com/oh-my-gantt@1.2.0/dist/index.umd.js"></script>
+<link rel="stylesheet"  href="https://unpkg.com/oh-my-gantt@1.2.5/dist/index.css" />
+<script src="https://unpkg.com/oh-my-gantt@1.2.5/dist/index.umd.js"></script>
 <script>
   var OhMyGantt = OMG.OhMyGantt
 <script>
@@ -151,7 +151,7 @@ const myGanttInstacne = new OhMyGantt(element, {
 ### 属性和方法
 
 | 属性/方法 | 描述 | Type  | Return |
-| ----- | ----- | ----- | -----| 
+| ----- | ----- | ----- | -----|
 | element | 创建实例时挂载的目标Dom | Element |
 | data | 创建实例时所设置的数据 | [MyGanttDataItem](#MyGanttDataItem)[] |  |
 | timeList | 时间表格中所有时间的时间列表 | Date[] |
