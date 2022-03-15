@@ -16,7 +16,8 @@ export default class MarkLine {
   $element: HTMLElement
   constructor(options: OhMarkLineOptions) {
     const defaultOptions: any = {
-      grid: 120
+      grid: 'time',
+      derection: 'vertical'
     }
     const opt: OhMarkLineOptionsExtendDefault = {
       ...defaultOptions,
