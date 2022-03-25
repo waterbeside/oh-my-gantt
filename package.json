@@ -1,6 +1,6 @@
 {
   "name": "oh-my-gantt",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
@@ -12,6 +12,13 @@
   },
   "author": "Natron Kan",
   "license": "MIT",
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waterbeside/oh-my-gantt"
+  },
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.16.5",

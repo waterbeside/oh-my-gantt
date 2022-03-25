@@ -17,8 +17,6 @@
   - [MarkLine 设置项](#markline-设置项)
   - [MarkLine 对象属性](#markline-对象属性)
 
-
-
 ## 安装
 
 ### 使用NPM安装
@@ -55,7 +53,6 @@ HTML
 ```
 
 JavaScript
-
 
 ```javascript
 
