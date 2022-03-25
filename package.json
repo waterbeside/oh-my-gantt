@@ -12,9 +12,6 @@
   },
   "author": "Natron Kan",
   "license": "MIT",
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/waterbeside/oh-my-gantt"
