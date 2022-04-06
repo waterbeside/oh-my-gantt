@@ -30,7 +30,6 @@ export function renderTimebar(props: RenderTimebarProps, ctx: OhMyGantt): HTMLEl
   } else  {
     barElm.style.bottom = `${options.timebarGap[0]}px`
   }
-  // console.log('props.timebarItemData', props.timebarItemData)
   if (props.timebarItemData.__config) {
     const timebarConfig = props.timebarItemData.__config
     if (timebarConfig.style) {
