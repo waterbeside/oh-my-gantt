@@ -95,6 +95,11 @@ const gantt = new OhMyGantt('#gantt-box', {
 })
 ```
 
+![](docs/examples/assets/img/example_1.png)
+
+> - Refer to `docs/examples/advanced.html` to draw something similar to the one shown above.
+> - The picture indicates the elements of `dataGrid`, `timeGrid`, `markLine`, `timebar`, etc.
+
 <a id="OhMyGantt"></a>
 
 ## OhMyGantt Instance

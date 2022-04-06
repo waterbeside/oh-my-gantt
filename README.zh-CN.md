@@ -41,7 +41,6 @@ import { OhMyGantt } from 'oh-my-gantt'
 <script>
   var OhMyGantt = OMG.OhMyGantt
 <script>
-
 ```
 
 ## 使用
@@ -95,6 +94,11 @@ const gantt = new OhMyGantt('#gantt-box', {
   data
 })
 ```
+
+![](docs/examples/assets/img/example_1.png)
+
+> - 参考 `docs/examples/advanced.html`, 可画出类似上图所示的效果。
+> - 图片指示了`dataGrid`, `timeGrid`, `markLine`, `timebar`等各元素。
 
 <a id="OhMyGantt"></a>
 
