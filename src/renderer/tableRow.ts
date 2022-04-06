@@ -131,7 +131,7 @@ export function renderTimeGridBodyRow(props: RenderTableRowProps, ctx: OhMyGantt
     // generate timebars
     timebarSettings.forEach((timebarSetting: any, timebarSettingIndex: number) => {
       const startTimeStamp = toDate(dateFormat(timebarSetting.from, timeIntervalFormatter)).getTime()
-      if (startTimeStamp === column.name) {
+      if (String(startTimeStamp) === String(column.name)) {
         const timebarData = computeTimebar({from: timebarSetting.from, to: timebarSetting.to}, ctx)
         const timebarProps = {
           width: timebarData.width - options.timebarGap[1] * 2,
